@@ -1,0 +1,22 @@
+% Layout: text-only (纯文段页)
+% 使用场景: 2-3段连贯文字解释概念性内容
+%
+% Slots:
+%   {{TITLE}}      - 页标题
+%   {{CHAPNOTE}}   - 对应论文章节标注（可选，留空则不显示）
+%   {{PARAGRAPHS}} - 2-3段正文，段间用 \vskip0.2cm 分隔
+%
+% 注意: 每段控制在80-120字，总字数不超过300字
+
+\begin{frame}
+  \frametitle{{{TITLE}}}
+  {{CHAPNOTE_LINE}}
+  \vskip0.15cm
+
+  {{PARAGRAPHS}}
+\end{frame}
+
+% --- chapnote 使用说明 ---
+% 如有 chapnote，{{CHAPNOTE_LINE}} 替换为:
+%   \chapnote{对应论文 \S X.X}
+% 如无，则删除该行

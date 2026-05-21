@@ -1,0 +1,300 @@
+% ============================================================
+% Academic Beamer Theme (通用学术报告主题)
+% 基于 metropolis 设计语言，适配中文学术答辩/开题/会议场景
+% 支持配色自定义，不绑定任何特定学校
+% ============================================================
+\ProvidesPackage{beamerthemeAcademic}[2025/06/01 Academic Beamer Theme v1.0]
+
+% ---------- 依赖包 ----------
+\RequirePackage{tikz}
+\RequirePackage{graphicx}
+\RequirePackage{etoolbox}
+\RequirePackage{xkeyval}
+
+% ============================================================
+% 配色方案（可通过 \setaccentcolor 切换）
+% ============================================================
+
+% 预设配色
+\definecolor{academic-blue}{RGB}{26, 58, 92}        % 深蓝（默认）
+\definecolor{academic-red}{RGB}{139, 0, 0}          % 深红
+\definecolor{academic-green}{RGB}{0, 100, 60}       % 深绿
+\definecolor{academic-purple}{RGB}{75, 0, 110}      % 深紫
+\definecolor{academic-teal}{RGB}{0, 80, 100}        % 深青
+
+% 功能色（不随主题色变化）
+\definecolor{textgray}{RGB}{90, 90, 90}             % 辅助文字灰
+\definecolor{lightline}{RGB}{200, 200, 205}         % 细分隔线
+\definecolor{lightbg}{RGB}{248, 248, 250}           % 浅灰背景
+\definecolor{inkcolor}{RGB}{35, 35, 42}             % 主文字色
+
+% 默认主题色
+\colorlet{accentcolor}{academic-blue}
+\colorlet{accentdark}{academic-blue}
+\colorlet{accentlight}{academic-blue!12}
+
+% 切换主题色命令
+\newcommand{\setaccentcolor}[1]{%
+  \colorlet{accentcolor}{#1}%
+  \colorlet{accentdark}{#1}%
+  \colorlet{accentlight}{#1!12}%
+  % 更新 beamer 颜色
+  \setbeamercolor{structure}{fg=accentcolor}%
+  \setbeamercolor{title}{fg=accentcolor}%
+  \setbeamercolor{frametitle}{fg=accentcolor, bg=white}%
+  \setbeamercolor{section in head/foot}{fg=white, bg=accentdark}%
+  \setbeamercolor{alerted text}{fg=accentcolor}%
+  \setbeamercolor{block title}{fg=white, bg=accentcolor}%
+}
+
+% 预设方案快捷命令
+\newcommand{\useblue}{\setaccentcolor{academic-blue}}
+\newcommand{\usered}{\setaccentcolor{academic-red}}
+\newcommand{\usegreen}{\setaccentcolor{academic-green}}
+\newcommand{\usepurple}{\setaccentcolor{academic-purple}}
+\newcommand{\useteal}{\setaccentcolor{academic-teal}}
+
+% ============================================================
+% Beamer 颜色设置
+% ============================================================
+\setbeamercolor{structure}{fg=accentcolor}
+\setbeamercolor{title}{fg=accentcolor}
+\setbeamercolor{frametitle}{fg=accentcolor, bg=white}
+\setbeamercolor{headline}{fg=white, bg=accentdark}
+\setbeamercolor{footline}{fg=textgray, bg=white}
+\setbeamercolor{section in head/foot}{fg=white, bg=accentdark}
+\setbeamercolor{subsection in head/foot}{fg=accentdark, bg=accentlight}
+\setbeamercolor{author in head/foot}{fg=textgray, bg=white}
+\setbeamercolor{title in head/foot}{fg=accentcolor, bg=white}
+\setbeamercolor{date in head/foot}{fg=textgray, bg=white}
+\setbeamercolor{block title}{fg=white, bg=accentcolor}
+\setbeamercolor{block body}{fg=black, bg=lightbg}
+\setbeamercolor{item}{fg=accentcolor}
+\setbeamercolor{subitem}{fg=accentcolor}
+\setbeamercolor{subsubitem}{fg=accentcolor}
+\setbeamercolor{enumerate item}{fg=accentcolor}
+\setbeamercolor{enumerate subitem}{fg=accentcolor}
+\setbeamercolor{description item}{fg=accentcolor}
+\setbeamercolor{caption name}{fg=accentcolor}
+\setbeamercolor{normal text}{fg=inkcolor}
+\setbeamercolor{alerted text}{fg=accentcolor}
+
+% ============================================================
+% Beamer 字体设置
+% ============================================================
+\setbeamerfont{title}{size=\Large, series=\bfseries}
+\setbeamerfont{frametitle}{size=\fontsize{13pt}{16pt}\selectfont, series=\bfseries, family=\sffamily}
+\setbeamerfont{framesubtitle}{size=\normalsize}
+\setbeamerfont{headline}{size=\scriptsize}
+\setbeamerfont{footline}{size=\fontsize{6.5pt}{8pt}\selectfont}
+\setbeamerfont{block title}{size=\normalsize, series=\bfseries}
+\setbeamerfont{section in toc}{series=\bfseries}
+
+% ============================================================
+% Itemize 样式
+% ============================================================
+\setbeamertemplate{itemize item}{\color{accentcolor}\raisebox{0.18ex}{\small\textbullet}}
+\setbeamertemplate{itemize subitem}{\color{accentcolor}\raisebox{0.18ex}{\scriptsize\textbullet}}
+\setbeamertemplate{itemize subsubitem}{\color{accentcolor!60}\raisebox{0.18ex}{\tiny\textbullet}}
+
+% 去掉导航符号
+\setbeamertemplate{navigation symbols}{}
+
+% ============================================================
+% Headline 模板
+% ============================================================
+\setbeamertemplate{headline}{%
+  \leavevmode%
+  \ifx\insertsubsectionhead\@empty
+    \begin{beamercolorbox}[wd=\paperwidth, ht=0.34cm, dp=0.22cm, leftskip=0.40cm, rightskip=0.40cm, center]{section in head/foot}%
+      \usebeamerfont{headline}\vphantom{Ag}\insertsectionhead%
+    \end{beamercolorbox}%
+  \else
+    \begin{beamercolorbox}[wd=0.36\paperwidth, ht=0.34cm, dp=0.22cm, leftskip=0.40cm, rightskip=0.20cm]{section in head/foot}%
+      \usebeamerfont{headline}\vphantom{Ag}\insertsectionhead%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=0.64\paperwidth, ht=0.34cm, dp=0.22cm, leftskip=0.30cm, rightskip=0.40cm]{subsection in head/foot}%
+      \usebeamerfont{headline}\vphantom{Ag}\insertsubsectionhead%
+    \end{beamercolorbox}%
+  \fi
+  \vskip0pt%
+}
+
+% ============================================================
+% Footline 模板（极简：白底+细线+灰字）
+% ============================================================
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox to \paperwidth{%
+    \hspace*{0.4cm}\textcolor{lightline}{\rule{0.92\paperwidth}{0.3pt}}\hspace*{0.4cm}%
+  }%
+  \vskip2pt%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.34\paperwidth, ht=2.0ex, dp=0.8ex, leftskip=.4cm]{author in head/foot}%
+      \usebeamerfont{footline}\insertshortauthor~~\textcolor{lightline}{|}~~\insertshortinstitute%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.40\paperwidth, ht=2.0ex, dp=0.8ex, center]{title in head/foot}%
+      \usebeamerfont{footline}\insertshorttitle%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.26\paperwidth, ht=2.0ex, dp=0.8ex, rightskip=.4cm plus1fil]{date in head/foot}%
+      \usebeamerfont{footline}\hfill\insertshortdate\hspace{1.2em}%
+      \textcolor{accentcolor}{\bfseries\insertframenumber}\,/\,\inserttotalframenumber%
+    \end{beamercolorbox}%
+  }%
+  \vskip3pt%
+}
+
+% ============================================================
+% Frametitle 模板
+% ============================================================
+\setbeamertemplate{frametitle}{%
+  \vskip4pt%
+  \hbox{\hskip-0.7cm%
+    \begin{minipage}[c]{\paperwidth}
+      \hspace{0.1cm}\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle%
+      \ifx\insertframesubtitle\empty\else%
+        \\[2pt]
+        \hspace{0.1cm}\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle%
+      \fi
+    \end{minipage}%
+  }%
+  \vskip2pt%
+}
+
+% ============================================================
+% Title Page 模板
+% ============================================================
+\setbeamertemplate{title page}{%
+  \vskip1cm%
+  \begin{center}
+    {\color{accentcolor}\rule{0.85\textwidth}{0.8pt}}\\[0.5cm]
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle}\\[0.3cm]
+    {\color{accentcolor}\rule{0.85\textwidth}{0.8pt}}
+  \end{center}
+  \vskip0.6cm%
+  \begin{center}
+    \begin{tabular}{r@{\;:\;}l}
+      \textbf{答辩学生} & \insertauthor \\[4pt]
+      \textbf{导\quad\quad 师} & \supervisor \\[4pt]
+      \textbf{专\quad\quad 业} & \major \\
+    \end{tabular}
+  \end{center}
+  \vskip0.8cm%
+  \begin{center}
+    \insertdate
+  \end{center}
+  \vfill%
+}
+
+% ============================================================
+% 自定义命令
+% ============================================================
+
+% --- 导师、专业 ---
+\newcommand{\supervisor}{}
+\newcommand{\setsupervisor}[1]{\renewcommand{\supervisor}{#1}}
+\newcommand{\major}{}
+\newcommand{\setmajor}[1]{\renewcommand{\major}{#1}}
+
+% --- 章节分隔页 ---
+% 用法: \sectiondivider{一}{研究背景与科学问题}
+\newcommand{\sectiondivider}[2]{%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture, overlay]
+      \fill[accentcolor] (current page.north west) rectangle (current page.south east);
+      \draw[white, line width=0.6pt] ([xshift=2cm, yshift=-3.0cm]current page.north west)
+        -- ([xshift=-2cm, yshift=-3.0cm]current page.north east);
+      \draw[white, line width=0.6pt] ([xshift=2cm, yshift=3.0cm]current page.south west)
+        -- ([xshift=-2cm, yshift=3.0cm]current page.south east);
+      \node[circle, draw=white, line width=1.2pt, minimum size=2.0cm,
+            text=white, font=\fontsize{34pt}{40pt}\selectfont\bfseries]
+            at ([yshift=0.7cm]current page.center) {#1};
+      \node[white, font=\fontsize{22pt}{28pt}\selectfont\bfseries]
+            at ([yshift=-1.5cm]current page.center) {#2};
+    \end{tikzpicture}
+  \end{frame}
+}
+
+% --- 论文章节小注 ---
+\newcommand{\chapnote}[1]{%
+  {\scriptsize\color{textgray}\itshape #1\par}\vskip2pt%
+}
+
+% --- 图说 ---
+\newcommand{\figcap}[1]{%
+  \vskip-2pt{\centering\scriptsize\itshape\color{textgray}#1\par}%
+}
+
+% --- 结论高亮框 ---
+\newcommand{\keybox}[1]{%
+  \begin{center}
+  \begin{tikzpicture}
+    \node[draw=lightline, line width=0.5pt, fill=black!4,
+          rounded corners=2pt, inner sep=6pt,
+          text width=0.92\linewidth, align=left, font=\small]{#1};
+  \end{tikzpicture}
+  \end{center}
+}
+
+% ============================================================
+% TOC 样式
+% ============================================================
+\setbeamertemplate{section in toc}{%
+  \leavevmode%
+  \llap{%
+    \tikz[baseline=(num.base)]{%
+      \node[fill=accentcolor, text=white, circle, inner sep=1.5pt, font=\scriptsize\bfseries] (num) {\inserttocsectionnumber};%
+    }%
+    \hspace{6pt}%
+  }%
+  \usebeamerfont{section in toc}\inserttocsection\par%
+}
+
+\setbeamertemplate{subsection in toc}{%
+  \hspace{1.8em}\inserttocsubsection\par%
+}
+
+% 关闭默认 AtBeginSection（由用户手动控制分隔页）
+\AtBeginSection[]{}
+
+% ============================================================
+% 致谢页命令
+% ============================================================
+% 用法: \thanksframe[gate-image]{主标语}{作者信息}
+% 示例: \thanksframe[nwu-gate]{恳请老师批评指正}{西北大学 数学学院 | 沈志恒}
+% 无图: \thanksframe{恳请老师批评指正}{西北大学 数学学院 | 沈志恒}
+\newcommand{\thanksframe}[3][]{%
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture, overlay]
+      \fill[accentcolor] (current page.north west) rectangle
+        ([yshift=-0.12cm]current page.north east);
+      \fill[accentcolor] ([yshift=0.12cm]current page.south west) rectangle
+        (current page.south east);
+    \end{tikzpicture}
+    \vbox to \paperheight\bgroup
+      \vskip0.6cm
+      \begin{center}
+        {\color{accentcolor}\sffamily\fontsize{12pt}{14pt}\selectfont\addfontfeature{LetterSpace=20.0}THANK YOU}
+      \end{center}
+      \vskip0.4cm
+      \ifstrempty{#1}{%
+        % 无图模式：纯文字居中
+        \vfill
+      }{%
+        % 有图模式：显示校门/标志图
+        \begin{center}
+          \includegraphics[width=0.86\paperwidth]{#1}
+        \end{center}
+      }%
+      \vfill
+      \begin{center}
+        {\color{accentcolor}\rule{1.6cm}{0.6pt}\hspace{0.5cm}\raisebox{0.18em}{$\bullet$}\hspace{0.5cm}\rule{1.6cm}{0.6pt}}\\[0.6cm]
+        {\color{accentcolor}\sffamily\fontsize{26pt}{34pt}\selectfont\bfseries #2}\\[0.5cm]
+        {\color{textgray}\sffamily\fontsize{10pt}{12pt}\selectfont #3}
+      \end{center}
+      \vskip1.0cm
+    \egroup
+  \end{frame}
+}
+
+\endinput

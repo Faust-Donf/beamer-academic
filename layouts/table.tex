@@ -1,0 +1,45 @@
+% Layout: table (数据表格页)
+% 使用场景: 展示实验结果、对比数据、多组统计量
+%
+% Slots:
+%   {{TITLE}}      - 页标题
+%   {{CHAPNOTE}}   - 对应论文章节标注（可选）
+%   {{INTRO_TEXT}} - 表格说明文字（可选，50字以内）
+%   {{TABLE}}      - booktabs 格式表格
+%   {{CONCLUSION}} - 表下结论文字（80-120字）
+%
+% 注意: 表格行数3-8行，列数3-6列
+
+\begin{frame}
+  \frametitle{{{TITLE}}}
+  {{CHAPNOTE_LINE}}
+  \vskip0.1cm
+
+  {{INTRO_TEXT}}
+
+  \vskip0.15cm
+  \begin{center}\small
+  \setlength{\tabcolsep}{4pt}
+  {{TABLE}}
+  \end{center}
+
+  \vskip0.2cm
+  \small
+  {{CONCLUSION}}
+\end{frame}
+
+% --- TABLE 示例 ---
+%   \begin{tabular}{@{}lcccc@{}}
+%     \toprule
+%     \textbf{方法} & \textbf{精度} & \textbf{召回率} & \textbf{F1} & \textbf{$P$值} \\
+%     \midrule
+%     基线 & 0.72 & 0.68 & 0.70 & --- \\
+%     \rowcolor{black!5}
+%     \textbf{本文} & \textbf{0.89} & \textbf{0.85} & \textbf{0.87} & $0.003^*$ \\
+%     \bottomrule
+%   \end{tabular}
+%
+% 技巧:
+%   - 用 \rowcolor{black!5} 高亮关键行
+%   - 用 \alert{} 标注关键数值
+%   - 用 \addlinespace[2pt] 增加行间距

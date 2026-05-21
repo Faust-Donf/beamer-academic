@@ -1,0 +1,39 @@
+% Layout: list (列表页)
+% 使用场景: 罗列3-5个并列要点（创新点、局限、展望、科研成果等）
+%
+% Slots:
+%   {{TITLE}}      - 页标题
+%   {{CHAPNOTE}}   - 对应论文章节标注（可选）
+%   {{INTRO_TEXT}} - 引入文字（可选，50字以内）
+%   {{ITEMS}}      - enumerate 列表内容
+%
+% 注意: 每条有简短解释，不是纯标题列表
+
+\begin{frame}
+  \frametitle{{{TITLE}}}
+  {{CHAPNOTE_LINE}}
+  \vskip0.15cm
+
+  {{INTRO_TEXT}}
+
+  \vskip0.2cm
+
+  {{ITEMS}}
+\end{frame}
+
+% --- ITEMS 示例（enumerate 风格）---
+%   \begin{enumerate}\setlength\itemsep{0.45em}
+%     \item \textbf{属级数据整合与时间标尺统一}\,——\,以 \alert{272 属} 为基础，
+%           构建对齐 ICS 标尺的出现-缺失矩阵;
+%     \item \textbf{面向视角差异的形态表征 (VASM)}\,——\,将壳体几何分解为
+%           视角无关核心层与视角特异层;
+%     \item \textbf{多元时间序列方向性分析}\,——\,基于 VAR/Granger 与小波相干，
+%           将经验叙事推进为\alert{可检验的统计命题};
+%   \end{enumerate}
+%
+% --- ITEMS 示例（itemize 风格，适合局限/展望）---
+%   \begin{itemize}\setlength\itemsep{0.4em}
+%     \item 化石记录不完整，FAD/LAD 存在时间不确定性;
+%     \item 主分析样本量有限 ($N=21$)，受小样本约束;
+%     \item 分类学替代树以林奈层级近似系统发育关系。
+%   \end{itemize}

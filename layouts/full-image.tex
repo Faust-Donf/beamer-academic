@@ -1,0 +1,29 @@
+% Layout: full-image (满版图页)
+% 使用场景: 图表信息量大，需要尽可能大地展示
+%
+% Slots:
+%   {{TITLE}}      - 页标题
+%   {{CHAPNOTE}}   - 对应论文章节标注（可选）
+%   {{IMAGE_PATH}} - 图片文件路径
+%   {{CAPTION}}    - 底部图说（一句话）
+%
+% 布局: 图片通过 tikz overlay 居中放大，占页面约70%面积
+
+\begin{frame}
+  \frametitle{{{TITLE}}}
+  {{CHAPNOTE_LINE}}
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=center] at ([yshift=-0.25cm]current page.center) {%
+      \includegraphics[width=0.90\paperwidth, height=0.70\paperheight, keepaspectratio]{{{IMAGE_PATH}}}};
+  \end{tikzpicture}
+  \vskip-0.4cm
+  \begin{flushleft}\scriptsize\itshape\color{textgray}
+  {{CAPTION}}
+  \end{flushleft}
+\end{frame}
+
+% --- 注意事项 ---
+% 1. 图片通过 tikz overlay 定位，不受正常文本流影响
+% 2. caption 放在左下角，用灰色小字
+% 3. 如果图片有白色背景，效果最佳
+% 4. 适合：时序图、散点图、热力图、多面板组合图

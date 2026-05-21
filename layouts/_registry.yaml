@@ -1,0 +1,192 @@
+# Beamer Academic Layout Registry
+# 每种版式的选型规则、适用场景、填充槽位定义
+
+layouts:
+  - id: cover
+    name: 封面页
+    file: cover.tex
+    when: "第一页。展示论文标题、答辩人、导师、专业、院校、日期。"
+    max_per_presentation: 1
+    position: first
+    slots:
+      - title        # 论文标题
+      - author       # 答辩人姓名
+      - supervisor   # 导师姓名+职称
+      - major        # 专业名称
+      - institute    # 院校名称
+      - date         # 答辩日期
+
+  - id: toc
+    name: 多级目录页
+    file: toc.tex
+    when: "第二页。展示全文章节结构大纲（3-6章），每章标题下可带2-3个关键词或子节名。"
+    max_per_presentation: 1
+    position: second
+    slots:
+      - chapters     # 章节列表，每项含 {number, title, keywords[]}
+
+  - id: section-divider
+    name: 章节分隔页
+    file: section-divider.tex
+    when: "每章开头的过渡页。全色底+圆圈序号+章标题。用于视觉节奏分隔。"
+    position: chapter_start
+    slots:
+      - chapter_number  # 中文数字（一、二、三...）
+      - chapter_title   # 章标题
+
+  - id: text-only
+    name: 纯文段页
+    file: text-only.tex
+    when: >
+      需要用2-3段连贯文字解释概念性内容：研究背景、问题定义、
+      经典命题、假说描述、学术定位、讨论等。不需要图表辅助即可理解的内容。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - paragraphs   # 2-3段正文（每段80-120字）
+
+  - id: text-left-image-right
+    name: 左文右图
+    file: text-left-image-right.tex
+    when: >
+      文字描述为主，配合1-2张说明性图片。文字解释概念或方法，
+      图片起辅助说明作用。适合：数据来源说明+数据截图、方法描述+示意图。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - left_text    # 左侧文字（120-180字）
+      - images       # 右侧图片列表 [{path, caption}]
+
+  - id: image-left-text-right
+    name: 左图右文
+    file: image-left-text-right.tex
+    when: >
+      图/表是主体信息载体，右侧文字做数据解读。适合：
+      散点图+统计结果解读、PCoA图+检验结果表格、碎石图+解释。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - image        # 左侧图片 {path, caption}
+      - right_text   # 右侧解读文字（100-150字）
+      - stats_table  # 可选的小型统计结果表
+
+  - id: formula
+    name: 公式推导页
+    file: formula.tex
+    when: >
+      需要展示1-2个核心公式/模型定义。适合：方法论的数学表达、
+      统计模型定义（VAR/BM/OU等）、度量指标定义。配文字解释各符号含义。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - intro_text   # 公式引入文字（50-80字）
+      - equations    # LaTeX公式（1-2个）
+      - explanation  # 符号解释或结论文字（80-120字）
+
+  - id: table
+    name: 数据表格页
+    file: table.tex
+    when: >
+      展示实验结果、对比数据、多组统计量。表格行数3-8行，列数3-6列。
+      适合：多方案对比、Granger检验结果、敏感性分析汇总、模型对比。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - intro_text   # 表格说明文字（可选，50字以内）
+      - table        # 表格内容（booktabs格式）
+      - conclusion   # 表下结论文字（80-120字）
+
+  - id: full-image
+    name: 满版图页
+    file: full-image.tex
+    when: >
+      图表本身信息量大，需要尽可能大地展示。适合：时序图、
+      多面板组合图、小波相干热力图、凸包对比图、散点图。
+      图片占页面70%以上面积。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - image_path   # 图片路径
+      - caption      # 底部图说（一句话，含图号）
+
+  - id: conclusion-box
+    name: 结论框页
+    file: conclusion-box.tex
+    when: >
+      一章或一组分析结束时，总结核心发现。用高亮框（keybox）
+      突出关键结论。适合：假设验证结果汇总、证据链总结、核心结论陈述。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - body_text    # 总结性正文（100-150字）
+      - keybox       # 高亮框内容（核心结论，50-80字）
+
+  - id: transition
+    name: 过渡衔接页
+    file: transition.tex
+    when: >
+      两章之间的逻辑桥梁。承上启下：上一章得出什么结论→自然引出什么问题→
+      下一章要做什么。适合：H1→H2、H2→H3等假设间的递进衔接。
+    slots:
+      - title        # 页标题
+      - summary      # 上一章结论概括（50-80字）
+      - questions    # 引出的问题/下一步方向（itemize，2-3条）
+
+  - id: list
+    name: 列表页
+    file: list.tex
+    when: >
+      罗列3-5个并列要点。适合：创新点列举、研究不足、
+      未来展望、科研成果。每条有简短解释（非纯标题列表）。
+    slots:
+      - title        # 页标题
+      - chapnote     # 对应论文章节标注（可选）
+      - intro_text   # 引入文字（可选，50字以内）
+      - items        # 列表项 [{title, description}]
+
+  - id: thanks
+    name: 致谢页
+    file: thanks.tex
+    when: "最后一页。感谢答辩委员会/听众。可配校门/标志建筑图。"
+    max_per_presentation: 1
+    position: last
+    slots:
+      - gate_image   # 校门/标志建筑图（可选）
+      - thanks_text  # 致谢主标语
+      - author_info  # 作者简短信息
+
+# =============================================================
+# 版式选型优先级规则（供AI在Step 2使用）
+# =============================================================
+selection_rules:
+  - "每章第一页必须是 section-divider"
+  - "含有核心公式/模型定义的内容优先用 formula 版式"
+  - "含有多行数据对比的内容优先用 table 版式"
+  - "图片信息量大（多面板、热力图）时用 full-image"
+  - "图片辅助说明时根据文图主次选 text-left-image-right 或 image-left-text-right"
+  - "纯概念解释、背景叙述用 text-only"
+  - "每章最后如有明确结论用 conclusion-box"
+  - "两章之间用 transition 衔接（承上启下）"
+  - "并列要点（创新点、局限、展望）用 list"
+  - "避免连续3页使用相同版式（节奏感）"
+  - "全文控制在30-50页（答辩20分钟约40页）"
+
+# =============================================================
+# 报告类型差异
+# =============================================================
+report_types:
+  defense:
+    required_pages: [cover, toc, thanks]
+    optional_pages: [list]  # 科研成果页
+    typical_length: 35-50
+    closing_text: "恳请各位老师批评指正"
+
+  proposal:
+    required_pages: [cover, toc, thanks]
+    typical_length: 25-35
+    closing_text: "恳请各位老师指导"
+
+  conference:
+    required_pages: [cover, thanks]
+    typical_length: 15-25
+    closing_text: "Thank you! Questions?"
