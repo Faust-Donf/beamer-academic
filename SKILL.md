@@ -91,9 +91,11 @@ Create `materials/` directory. Extraction strategy depends on input format:
 3. **Equations**: read and convert to LaTeX → `materials/equations.md`
 4. **Structure**: parse chapter/section from text → `materials/structure.md`
 
-## Phase 2: Outline Generation
+## Phase 2: Outline Generation (MANDATORY USER APPROVAL)
 
-Generate `outline.md` assigning a layout to each page.
+**This phase produces the blueprint for the entire presentation. Do NOT proceed to Phase 3 without explicit user approval.**
+
+Generate `outline.md` with full structural detail: chapter → section → per-page layout assignment.
 
 ### Layout Selection Rules (priority order)
 
@@ -117,35 +119,105 @@ Generate `outline.md` assigning a layout to each page.
 - Each chapter uses at least 3 different layouts
 - Total: 35–50 pages (defense), 25–35 (proposal), 15–25 (conference)
 
-### outline.md Format
+### outline.md Format (MUST include chapter/section/page three-level structure)
 
 ```markdown
-### P1 [cover]
-Title / Author / Supervisor / Date
+# 答辩PPT大纲
 
-### P2 [toc]
-4 chapters with sub-items
+## 基本信息
+- 类型: 答辩
+- 总页数: 42
+- 时长: 20分钟
+- 章节数: 4
 
-### P3 [section-divider]
-一、研究背景
+---
 
-### P4 [text-only]
-Title: XXX
-Content: (50-word summary)
+## 第一章 研究背景与科学问题（共8页：P3–P10）
 
-### P5 [text-left-image-right]
-Title: XXX
-Left: (summary)
-Right: fig_001.png
+### §1.1 研究现状（P4–P5）
+
+#### P4 [text-left-image-right]
+- 标题: 寒武纪辐射与软体动物的演化窗口
+- 左文: 介绍寒武纪时间窗口、软体动物门地位（约150字）
+- 右图: fig_001.png（地质年代柱状图）
+- 关键词: 演化窗口、软体动物门
+
+#### P5 [text-only]
+- 标题: 经典命题：Disparity vs. Diversity
+- 内容: 形态多样性与丰富度的时间先后关系争论（约180字）
+- 关键词: 形态多样性、分类丰富度
+
+### §1.2 研究目标与假设（P6–P8）
+
+#### P6 [text-only]
+- 标题: 现有研究的四点不足
+- 内容: 列举四个gap（约160字）
+- 关键词: 研究不足
+
+#### P7 [table]
+- 标题: 研究目标与三个核心假设
+- 表格: H1/H2/H3 + 核心假设 + 检验方法（3行4列）
+- 结论文字: 三者递进关系说明
+
+#### P8 [list]
+- 标题: 论文的主要创新
+- 条目: 5个创新点，每条一句话
+
+### §1.3 过渡（P9–P10）
+
+#### P9 [conclusion-box]
+- 标题: 第一章小结
+- 正文: 总结背景章要点
+- 高亮框: 本文核心命题
+
+#### P10 [transition]
+- 标题: 从问题到数据
+- 承上: 第一章确立了三个假设
+- 启下: 接下来介绍数据构建
+
+---
+
+## 第二章 数据构建与描述性分析（共7页：P11–P17）
+
+### §2.1 数据来源（P12–P13）
+...
+
+---
+
+## 第三章 ...
+
+---
+
+## 第四章 结论与展望（共5页：P38–P42）
+...
 ```
 
-### Checkpoint
+### HARD GATE: User Approval
 
-After generating `outline.md`, **pause and present it to user**:
+After generating `outline.md`, **STOP and present the full outline to user**. Display it in a clear, readable format:
 
-> 大纲已生成，请查看 outline.md。说"ok"继续，或提修改意见（如"P7改成满版图"）。
+> ## 📋 答辩PPT大纲（共 XX 页）
+>
+> 请仔细检查以下大纲，确认后我才会开始生成 beamer 内容。
+>
+> [展示完整 outline.md 内容]
+>
+> ---
+> **请确认或修改：**
+> - 说 "ok" 或 "确认" → 开始生成
+> - 说 "第二章加一页方法流程图" → 我修改大纲后再次确认
+> - 说 "P7改成满版图" → 调整版式
+> - 说 "第三章太长了，砍掉2页" → 精简结构
+>
+> ⚠️ 大纲确认后再修改结构会比较麻烦，建议在这一步把整体结构定好。
 
-Wait for confirmation before proceeding.
+**Do NOT generate any .tex content until user explicitly says "ok" / "确认" / "继续" / "没问题".**
+
+If user provides modifications:
+1. Update outline.md
+2. Re-present the updated version
+3. Ask for confirmation again
+4. Loop until approved
 
 ## Phase 3: Content Generation
 
