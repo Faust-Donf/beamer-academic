@@ -1,12 +1,12 @@
 ---
 name: beamer-academic
 description: >
-  Generate high-quality academic Beamer slides from a thesis/paper PDF. Supports thesis defense,
-  proposal presentations, and conference talks. Built-in layout library with 13 professional
-  page types, 5 color schemes, and interactive editing loop.
+  Generate high-quality academic Beamer slides from a thesis/paper (PDF, Word, or LaTeX source).
+  Supports thesis defense, proposal presentations, and conference talks. Built-in layout library
+  with 13 professional page types, 5 color schemes, and interactive editing loop.
   Use when: (1) User asks to create thesis defense slides/PPT, (2) User wants to generate
   academic presentation from a paper, (3) User mentions beamer, 答辩PPT, 学术报告, 开题PPT,
-  论文幻灯片, or academic slides, (4) User has a PDF/docx thesis and wants presentation output.
+  论文幻灯片, or academic slides, (4) User has a PDF/docx/tex thesis and wants presentation output.
 ---
 
 # Beamer Academic
@@ -16,16 +16,51 @@ Generate publication-quality Beamer slides from an academic paper in one automat
 ## Pipeline Overview
 
 ```
-论文.pdf → 素材提取 → 大纲生成 → [用户确认] → 内容填充 → 编译 → [交互修改循环]
+论文 → 素材提取 → 大纲生成 → [用户确认] → 内容填充 → 编译 → [交互修改循环]
 ```
 
-## Phase 0: Environment Check
+## Phase 0: Environment Check & Input Clarification
 
-1. Locate thesis file (`.pdf` or `.docx`) in current directory. If multiple, ask user which one.
-2. Verify `xelatex` is available: `which xelatex`. If missing, suggest install command.
-3. Check for `config.yaml` in current directory:
-   - Exists: read and use.
-   - Missing: ask user for basic info, then generate from template at `assets/config.yaml`.
+### 0.1 Locate Thesis File
+
+Search current directory for thesis in priority order:
+1. `.tex` (LaTeX source — best quality, figures/equations directly reusable)
+2. `.docx` (Word — good for text extraction, figures embedded)
+3. `.pdf` (PDF — acceptable but figure extraction may lose quality)
+
+If multiple candidates found, ask user which one.
+If none found, prompt: "请把论文文件放到当前目录（支持 .tex / .docx / .pdf）"
+
+**Recommend .tex or .docx over PDF**: PDF figure extraction can produce low-quality raster images.
+If user only has PDF, warn:
+> 注意：PDF 提取的图片可能有质量损失。如果你有论文的 Word 或 LaTeX 源文件，建议优先使用。
+
+### 0.2 Check LaTeX Environment
+
+```bash
+which xelatex
+```
+
+If missing, provide install guidance by OS:
+
+| OS | Command |
+|----|---------|
+| macOS | `brew install --cask mactex-no-gui` (推荐，约3.5GB) 或完整版 `brew install --cask mactex` |
+| Ubuntu/Debian | `sudo apt install texlive-xetex texlive-lang-chinese texlive-fonts-recommended` |
+| Fedora/RHEL | `sudo dnf install texlive-xetex texlive-xecjk` |
+| Windows (WSL) | `sudo apt install texlive-xetex texlive-lang-chinese` |
+| Arch | `sudo pacman -S texlive-xetex texlive-langchinese` |
+
+If user cannot or does not want to install LaTeX locally, offer alternative:
+> 也可以只生成 .tex 文件，然后上传到 Overleaf (https://www.overleaf.com) 在线编译。
+
+In this case, skip Phase 4 compilation and deliver `.tex` + `.sty` + figures as final output.
+
+### 0.3 Configuration
+
+Check for `config.yaml` in current directory:
+- Exists: read and use.
+- Missing: ask user for basic info, then generate from template at `assets/config.yaml`.
 
 Required user info (ask if not in config):
 - Institution name and department
@@ -35,12 +70,26 @@ Required user info (ask if not in config):
 
 ## Phase 1: Material Extraction
 
-Create `materials/` directory. Extract from thesis:
+Create `materials/` directory. Extraction strategy depends on input format:
 
-1. **Figures** → `materials/figures/` (named `fig_001.png`, `fig_002.png`, ...)
-2. **Tables** → `materials/tables/` (as LaTeX booktabs snippets)
-3. **Equations** → `materials/equations.md` (LaTeX source)
-4. **Structure** → `materials/structure.md` (chapter/section hierarchy + 50-word summaries)
+### From .tex source (best)
+1. **Figures**: locate `\includegraphics` paths, copy originals → `materials/figures/`
+2. **Tables**: extract `tabular`/`table` environments → `materials/tables/`
+3. **Equations**: extract `equation`/`align`/`$$` blocks → `materials/equations.md`
+4. **Structure**: parse `\chapter`/`\section` hierarchy → `materials/structure.md`
+
+### From .docx
+1. **Figures**: extract embedded images (python-docx or unzip) → `materials/figures/`
+2. **Tables**: extract table contents → `materials/tables/`
+3. **Equations**: extract OMML/LaTeX equations → `materials/equations.md`
+4. **Structure**: parse heading hierarchy → `materials/structure.md`
+
+### From .pdf (fallback)
+1. **Figures**: use `pdfimages` or read PDF for embedded images → `materials/figures/`
+   - ⚠️ Quality may degrade. Prefer vector (PDF/SVG) extraction when possible.
+2. **Tables**: read and reconstruct → `materials/tables/`
+3. **Equations**: read and convert to LaTeX → `materials/equations.md`
+4. **Structure**: parse chapter/section from text → `materials/structure.md`
 
 ## Phase 2: Outline Generation
 
@@ -118,13 +167,42 @@ Wait for confirmation before proceeding.
 | `\alert{}` keywords per page | 1–2 |
 | Paragraph style | Full sentences, not bullet lists |
 
-## Phase 4: Compilation
+## Phase 4: Compilation & Layout Verification
+
+### 4.1 Compile
 
 ```bash
 xelatex -interaction=nonstopmode defense.tex && xelatex -interaction=nonstopmode defense.tex
 ```
 
 On failure: read `defense.log`, fix common issues (missing image, font, overfull hbox), retry up to 3 times.
+
+If user has no LaTeX environment, skip compilation and deliver `.tex` + `.sty` + `materials/figures/`.
+
+### 4.2 Layout Bug Detection
+
+After compilation, check `defense.log` for these common layout issues:
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `Overfull \vbox` on frame | Content exceeds page height | Reduce text, split into 2 pages, or shrink font |
+| `Overfull \hbox` with image | Image too wide for column | Add `keepaspectratio`, reduce `width` |
+| Image overlaps text in columns | `\column` width sum > `\textwidth` | Ensure left + right column ≤ 1.0 |
+| tikz overlay covers text | `[remember picture, overlay]` node position wrong | Adjust `yshift`/`xshift` values |
+| Text runs below frame | Too many paragraphs | Cut to 150-200 chars or split page |
+
+**Proactive overlap prevention** (apply during Phase 3 content generation):
+- For `text-left-image-right`: left text ≤ 150 chars, image height ≤ `3.4cm` per image
+- For `image-left-text-right`: right text ≤ 120 chars, image height ≤ `0.60\textheight`
+- For `full-image`: use **only** tikz overlay positioning, no surrounding text except `\figcap`
+- For `formula`: max 2 equations, with `\vskip0.1cm` spacing between
+- Never put more than 3 `\vskip` commands in one frame (sign of overstuffing)
+
+**If overlap detected in compiled PDF** (user reports "P7图文重叠了"):
+1. Identify the frame in `.tex`
+2. Check: is text too long? Is image too tall? Are column widths correct?
+3. Apply fix: reduce text / shrink image / split into 2 pages
+4. Recompile and verify
 
 ## Phase 5: Interactive Editing
 

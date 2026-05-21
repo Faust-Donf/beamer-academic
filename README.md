@@ -61,11 +61,12 @@
 
 | 能力 | 说明 |
 |------|------|
-| 一键生成 | 只需提供论文 PDF，全流程自动 |
+| 一键生成 | 提供论文（.tex / .docx / .pdf），全流程自动 |
 | 13 种版式 | 封面、目录、分隔页、纯文段、左文右图、左图右文、公式、表格、满版图、结论框、过渡、列表、致谢 |
 | 交互修改 | 生成后按页码精准修改，无需懂 LaTeX |
 | 5 种配色 | 蓝/红/绿/紫/青，一行配置切换 |
 | 多场景 | 毕业答辩、开题报告、学术会议 |
+| 自动纠错 | 检测图文重叠、溢出等排版问题并自动修复 |
 
 ## 快速开始
 
@@ -77,18 +78,36 @@ git clone https://github.com/Faust-Donf/beamer-academic.git ~/.claude/skills/bea
 
 ### 前置依赖
 
+**LaTeX 环境**（推荐安装，非必须）：
+
 ```bash
-# macOS
-brew install --cask mactex
+# macOS（推荐 no-gui 版，体积小）
+brew install --cask mactex-no-gui
 
 # Ubuntu / Debian
 sudo apt install texlive-xetex texlive-lang-chinese texlive-fonts-recommended
+
+# Fedora
+sudo dnf install texlive-xetex texlive-xecjk
+
+# Windows (WSL)
+sudo apt install texlive-xetex texlive-lang-chinese
 ```
+
+> **没有 LaTeX 环境？** 没关系！Skill 会生成 `.tex` 源文件，你可以上传到 [Overleaf](https://www.overleaf.com) 在线编译。
+
+### 论文输入格式
+
+| 格式 | 推荐度 | 说明 |
+|------|--------|------|
+| `.tex` | ⭐⭐⭐ | 最佳选择，图片和公式可直接复用 |
+| `.docx` | ⭐⭐ | Word 文件，图片质量好 |
+| `.pdf` | ⭐ | 可用，但图片提取可能有质量损失 |
 
 ### 使用
 
 ```bash
-mkdir my-defense && cp 论文.pdf my-defense/ && cd my-defense
+mkdir my-defense && cp 论文.docx my-defense/ && cd my-defense
 ```
 
 然后在 Claude Code 中说：
