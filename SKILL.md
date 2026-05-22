@@ -91,133 +91,107 @@ Create `materials/` directory. Extraction strategy depends on input format:
 3. **Equations**: read and convert to LaTeX → `materials/equations.md`
 4. **Structure**: parse chapter/section from text → `materials/structure.md`
 
-## Phase 2: Outline Generation (MANDATORY USER APPROVAL)
+## Phase 2: Brainstorm Outline (Interactive, In-Conversation)
 
-**This phase produces the blueprint for the entire presentation. Do NOT proceed to Phase 3 without explicit user approval.**
+**This phase determines the entire presentation structure through conversation with the user. All confirmation happens IN THE CHAT — never ask user to open a file.**
 
-Generate `outline.md` with full structural detail: chapter → section → per-page layout assignment.
+### 2.1 First Pass: Structure Proposal
 
-### Layout Selection Rules (priority order)
+After reading the thesis, propose the high-level structure directly in conversation:
 
-1. Page 1 → `cover`
-2. Page 2 → `toc`
-3. Each chapter start → `section-divider`
-4. Core formula/model definition → `formula`
-5. Multi-row data comparison → `table`
-6. High-information figure (multi-panel, heatmap) → `full-image`
-7. Text-primary with supporting figure → `text-left-image-right`
-8. Figure-primary with interpretation → `image-left-text-right`
-9. Pure concept/background → `text-only`
-10. Chapter-end with clear conclusion → `conclusion-box`
-11. Between chapters → `transition`
-12. Parallel bullet points → `list`
-13. Final page → `thanks`
+> ## 📐 PPT 结构提案
+>
+> 根据你的论文，我建议这样安排：
+>
+> **总页数**：42 页（约 20 分钟答辩）
+>
+> | 章 | 标题 | 页数 | 说明 |
+> |---|------|------|------|
+> | 一 | 研究背景与科学问题 | 8页 | 背景+命题+假设+创新点 |
+> | 二 | 数据构建与描述性分析 | 7页 | 数据来源+特征工程+时序总览 |
+> | 三 | 演化模式与驱动机制 | 15页 | H1+H2+H3 三个假设检验 |
+> | 四 | 结论与展望 | 5页 | 主要结论+局限+展望+成果 |
+>
+> **你觉得这个结构可以吗？** 可以告诉我：
+> - "第三章太长了，拆成两章"
+> - "加一章文献综述"
+> - "总页数控制在35页以内"
+
+Wait for user to confirm or adjust. Loop until structure is approved.
+
+### 2.2 Second Pass: Per-Section Detail
+
+Once chapter structure is approved, expand each chapter **in conversation** (not in a file):
+
+> ## 📋 第一章 详细安排（8页）
+>
+> | 页码 | 版式 | 标题 | 内容要点 |
+> |------|------|------|----------|
+> | P3 | 章节分隔 | 一、研究背景与科学问题 | — |
+> | P4 | 左文右图 | 寒武纪辐射与软体动物的演化窗口 | 演化窗口介绍 + 地质年代图 |
+> | P5 | 纯文段 | 经典命题：Disparity vs. Diversity | 形态多样性与丰富度争论 |
+> | P6 | 纯文段 | 驱动机制之一：外源突变 | Sinsk 事件背景 |
+> | P7 | 纯文段 | 驱动机制之二：系统发育约束 | OU 过程假说 |
+> | P8 | 列表 | 现有研究的四点不足 | 4个gap |
+> | P9 | 表格 | 研究目标与三个核心假设 | H1/H2/H3 表格 |
+> | P10 | 列表 | 论文的主要创新 | 5个创新点 |
+>
+> **这章的安排可以吗？** 可以说：
+> - "P5和P6合并成一页"
+> - "P9加一列'若成立则说明'"
+> - "ok，继续下一章"
+
+Present **one chapter at a time**. Wait for approval before showing the next chapter.
+
+### 2.3 Third Pass: Final Confirmation
+
+After all chapters are individually approved, show a **complete summary** in conversation:
+
+> ## ✅ 最终大纲确认
+>
+> | 章 | 页码范围 | 页数 | 版式分布 |
+> |---|---------|------|----------|
+> | 封面+目录 | P1–P2 | 2 | cover, toc |
+> | 一 研究背景 | P3–P10 | 8 | 分隔×1, 左文右图×1, 纯文段×3, 列表×1, 表格×1, 列表×1 |
+> | 二 数据构建 | P11–P17 | 7 | 分隔×1, ... |
+> | 三 演化机制 | P18–P32 | 15 | 分隔×1, ... |
+> | 四 结论展望 | P33–P37 | 5 | 分隔×1, ... |
+> | 致谢 | P38 | 1 | thanks |
+> | **合计** | | **38页** | |
+>
+> **确认后我将开始生成 beamer LaTeX 代码。确认吗？**
+
+**HARD GATE: Do NOT proceed to Phase 3 until user explicitly confirms the final summary.**
+
+### 2.4 Save to outline.md
+
+Only after final confirmation, save the approved structure to `outline.md` for Phase 3 reference. This file is for the AI's internal use — user has already approved everything in conversation.
+
+### Why In-Conversation Instead of File
+
+- Many users don't know how to open/read .md files
+- Conversation is the natural interaction medium in Claude Code
+- Iterative refinement is faster in chat (no "go check that file" round-trip)
+- Each chapter gets individual attention instead of one overwhelming dump
+
+### Layout Selection Rules (used in 2.2 per-page assignment)
+
+1. Each chapter start → `section-divider`
+2. Core formula/model definition → `formula`
+3. Multi-row data comparison → `table`
+4. High-information figure (multi-panel, heatmap) → `full-image`
+5. Text-primary with supporting figure → `text-left-image-right`
+6. Figure-primary with interpretation → `image-left-text-right`
+7. Pure concept/background → `text-only`
+8. Chapter-end with clear conclusion → `conclusion-box`
+9. Between chapters → `transition`
+10. Parallel bullet points → `list`
 
 ### Rhythm Constraints
 
 - No 3 consecutive pages with same layout
 - Each chapter uses at least 3 different layouts
 - Total: 35–50 pages (defense), 25–35 (proposal), 15–25 (conference)
-
-### outline.md Format (MUST include chapter/section/page three-level structure)
-
-```markdown
-# 答辩PPT大纲
-
-## 基本信息
-- 类型: 答辩
-- 总页数: 42
-- 时长: 20分钟
-- 章节数: 4
-
----
-
-## 第一章 研究背景与科学问题（共8页：P3–P10）
-
-### §1.1 研究现状（P4–P5）
-
-#### P4 [text-left-image-right]
-- 标题: 寒武纪辐射与软体动物的演化窗口
-- 左文: 介绍寒武纪时间窗口、软体动物门地位（约150字）
-- 右图: fig_001.png（地质年代柱状图）
-- 关键词: 演化窗口、软体动物门
-
-#### P5 [text-only]
-- 标题: 经典命题：Disparity vs. Diversity
-- 内容: 形态多样性与丰富度的时间先后关系争论（约180字）
-- 关键词: 形态多样性、分类丰富度
-
-### §1.2 研究目标与假设（P6–P8）
-
-#### P6 [text-only]
-- 标题: 现有研究的四点不足
-- 内容: 列举四个gap（约160字）
-- 关键词: 研究不足
-
-#### P7 [table]
-- 标题: 研究目标与三个核心假设
-- 表格: H1/H2/H3 + 核心假设 + 检验方法（3行4列）
-- 结论文字: 三者递进关系说明
-
-#### P8 [list]
-- 标题: 论文的主要创新
-- 条目: 5个创新点，每条一句话
-
-### §1.3 过渡（P9–P10）
-
-#### P9 [conclusion-box]
-- 标题: 第一章小结
-- 正文: 总结背景章要点
-- 高亮框: 本文核心命题
-
-#### P10 [transition]
-- 标题: 从问题到数据
-- 承上: 第一章确立了三个假设
-- 启下: 接下来介绍数据构建
-
----
-
-## 第二章 数据构建与描述性分析（共7页：P11–P17）
-
-### §2.1 数据来源（P12–P13）
-...
-
----
-
-## 第三章 ...
-
----
-
-## 第四章 结论与展望（共5页：P38–P42）
-...
-```
-
-### HARD GATE: User Approval
-
-After generating `outline.md`, **STOP and present the full outline to user**. Display it in a clear, readable format:
-
-> ## 📋 答辩PPT大纲（共 XX 页）
->
-> 请仔细检查以下大纲，确认后我才会开始生成 beamer 内容。
->
-> [展示完整 outline.md 内容]
->
-> ---
-> **请确认或修改：**
-> - 说 "ok" 或 "确认" → 开始生成
-> - 说 "第二章加一页方法流程图" → 我修改大纲后再次确认
-> - 说 "P7改成满版图" → 调整版式
-> - 说 "第三章太长了，砍掉2页" → 精简结构
->
-> ⚠️ 大纲确认后再修改结构会比较麻烦，建议在这一步把整体结构定好。
-
-**Do NOT generate any .tex content until user explicitly says "ok" / "确认" / "继续" / "没问题".**
-
-If user provides modifications:
-1. Update outline.md
-2. Re-present the updated version
-3. Ask for confirmation again
-4. Loop until approved
 
 ## Phase 3: Content Generation
 
