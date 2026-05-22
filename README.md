@@ -28,27 +28,27 @@
 
 ## 效果展示
 
-以下为真实答辩 PPT 截图（个人信息已模糊）：
+以下为使用本 Skill 生成的 Transformer 论文会议报告 PPT 截图：
 
 <table>
   <tr>
     <td align="center"><strong>封面页</strong></td>
-    <td align="center"><strong>多级目录</strong></td>
+    <td align="center"><strong>目录页</strong></td>
   </tr>
   <tr>
     <td><img src="docs/cover.png" width="380"></td>
     <td><img src="docs/toc.png" width="380"></td>
   </tr>
   <tr>
-    <td align="center"><strong>左文右图</strong></td>
-    <td align="center"><strong>表格+假设</strong></td>
+    <td align="center"><strong>段落+公式组合</strong></td>
+    <td align="center"><strong>段落+表格+结论</strong></td>
   </tr>
   <tr>
     <td><img src="docs/text-image.png" width="380"></td>
     <td><img src="docs/table.png" width="380"></td>
   </tr>
   <tr>
-    <td align="center"><strong>图+统计结果</strong></td>
+    <td align="center"><strong>实验结果表格</strong></td>
     <td align="center"><strong>致谢页</strong></td>
   </tr>
   <tr>
