@@ -67,6 +67,31 @@ Required user info (ask if not in config):
 - Author name, supervisor, major
 - Report type: `defense` | `proposal` | `conference`
 - Color preference: `blue` | `red` | `green` | `purple` | `teal`
+- Time limit (minutes): affects page count and content density
+- Language: thesis language vs. PPT language (e.g., 英文论文 → 中文PPT)
+
+### 0.4 Language Strategy
+
+If thesis language ≠ PPT language, establish rules upfront:
+
+> 你的论文是英文，PPT 要做中文版吗？
+> 对于专业术语，我会：
+> 1. 首次出现用"中文（English）"格式
+> 2. 之后统一用中文
+> 3. 公式/变量名保持英文不翻译
+>
+> 这样处理可以吗？
+
+Build a **terminology mapping table** (stored in `materials/terms.md`):
+```
+| English | 中文 | 首次出现页 |
+|---------|------|-----------|
+| disparity | 形态多样性 | P4 |
+| diversity | 分类丰富度 | P4 |
+| Ornstein-Uhlenbeck | OU 过程 | P8 |
+```
+
+Ensure **术语一致性**: same concept uses same translation across all pages.
 
 ## Phase 1: Material Extraction
 
@@ -90,6 +115,29 @@ Create `materials/` directory. Extraction strategy depends on input format:
 2. **Tables**: read and reconstruct → `materials/tables/`
 3. **Equations**: read and convert to LaTeX → `materials/equations.md`
 4. **Structure**: parse chapter/section from text → `materials/structure.md`
+
+### 1.2 Material Confirmation (In-Conversation)
+
+After extraction, present a **figure catalog** to user in conversation:
+
+> ## 🖼️ 素材库（共提取 12 张图）
+>
+> | # | 文件名 | 来源 | 内容描述 |
+> |---|--------|------|----------|
+> | 1 | fig_001.png | 论文图1 | 地质年代柱状图 |
+> | 2 | fig_002.png | 论文图4 | PCoA 碎石图 |
+> | 3 | fig_003.png | 论文图8 | 形态空间散点图 |
+> | ... | | | |
+>
+> **哪些图是你答辩必须展示的？** 可以说：
+> - "1, 3, 5, 8 必须用"
+> - "图7 不用了，跟图5 重复"
+> - "全部都可能用到"
+
+This ensures:
+- Key figures won't be missed in layout assignment
+- User has a mental model of available materials before the outline phase
+- Low-quality or duplicate figures can be flagged early
 
 ## Phase 2: Brainstorm Outline (Interactive, In-Conversation)
 
@@ -250,14 +298,27 @@ After compilation, check `defense.log` for these common layout issues:
 3. Apply fix: reduce text / shrink image / split into 2 pages
 4. Recompile and verify
 
-## Phase 5: Interactive Editing
+## Phase 5: Interactive Editing (Guided Choices)
 
 Present result:
 
-> ✅ PDF 已生成：./defense.pdf（共 XX 页）
-> 说修改意见（如"P7公式拆两页"），或说"满意"结束。
+> ✅ PDF 已生成：./defense.pdf（共 XX 页，预计答辩时长 XX 分钟）
+> 说修改意见，或说"满意"结束。
 
-Handle modifications:
+### 5.1 Guided Modification (Never Let User Struggle to Express)
+
+When user gives vague feedback, **offer concrete choices** instead of asking them to describe:
+
+| User says | Respond with choices |
+|-----------|---------------------|
+| "这页不好看" | "你觉得是：A. 文字太密想拆成两页？B. 图太小想换成满版图？C. 想换个版式？" |
+| "这里有点奇怪" | "我看到可能的问题：A. 图文重叠了 B. 文字太学术想简化 C. 想加个过渡说明？" |
+| "第三章不太行" | "第三章目前15页。你想：A. 整体缩减（砍到10页）？B. 某几页太密拆开？C. 补一页总结？" |
+| "改好看点" | "我可以：A. 加几页满版图让节奏更松 B. 关键结论用高亮框突出 C. 换个配色？" |
+
+**Principle**: Always give 2–3 concrete options with preview of effect. User picks, not describes.
+
+### 5.2 Modification Execution
 
 | Type | Action |
 |------|--------|
@@ -267,6 +328,55 @@ Handle modifications:
 | Layout switch | Replace frame with different layout skeleton |
 
 After each edit, recompile and present again. Loop until user says done.
+
+## Phase 6: Speaker Notes & Rehearsal Support (Optional)
+
+After user confirms the slides are satisfactory, offer:
+
+> 需要我帮你生成讲稿和配速建议吗？可以帮助你控制答辩节奏。
+
+If user accepts, generate `notes.md`:
+
+### 6.1 Per-Page Speaker Notes
+
+```markdown
+## P4 — 寒武纪辐射与软体动物的演化窗口
+⏱️ 建议时长: 45秒
+
+### 要点提词
+- 演化窗口: 5.41亿年前，持续4000万年
+- 软体动物门: 现代海洋第二大门类
+- 272个属: 本文研究对象
+
+### 讲稿参考
+"首先介绍一下研究背景。寒武纪是海洋生态系统大规模重组的关键时期……"
+```
+
+### 6.2 Time Pacing Table
+
+Present pacing summary in conversation:
+
+> ## ⏱️ 时间配速建议（总计 20 分钟）
+>
+> | 章 | 页数 | 建议时长 | 每页均速 |
+> |---|------|---------|---------|
+> | 一 研究背景 | 8页 | 4分钟 | 30秒/页 |
+> | 二 数据构建 | 7页 | 3.5分钟 | 30秒/页 |
+> | 三 演化机制 | 15页 | 9分钟 | 36秒/页（重点章节，可以慢一些） |
+> | 四 结论展望 | 5页 | 2.5分钟 | 30秒/页 |
+> | 致谢+缓冲 | 1页 | 1分钟 | — |
+>
+> ⚠️ 第三章是重点，建议对关键结果页多花时间讲解。
+
+### 6.3 Beamer Notes Integration (Optional)
+
+If user wants notes embedded in PDF (for dual-screen presentation mode):
+
+```latex
+\setbeameroption{show notes on second screen=right}
+```
+
+Add `\note{}` blocks to each frame in `.tex` with the speaker notes content.
 
 ## Reference Files
 
