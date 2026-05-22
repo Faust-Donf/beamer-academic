@@ -41,20 +41,23 @@ If user only has PDF, warn:
 which xelatex
 ```
 
-If missing, provide install guidance by OS:
+If missing, **recommend user to install** (this is a one-time setup, not optional):
+
+> 你的系统还没有安装 LaTeX 环境。beamer PPT 需要 xelatex 编译，我来帮你装一下：
+
+Then provide the command for user's OS and **offer to run it**:
 
 | OS | Command |
 |----|---------|
-| macOS | `brew install --cask mactex-no-gui` (推荐，约3.5GB) 或完整版 `brew install --cask mactex` |
+| macOS | `brew install --cask mactex-no-gui` (推荐，约3.5GB，装一次永久可用) |
 | Ubuntu/Debian | `sudo apt install texlive-xetex texlive-lang-chinese texlive-fonts-recommended` |
 | Fedora/RHEL | `sudo dnf install texlive-xetex texlive-xecjk` |
 | Windows (WSL) | `sudo apt install texlive-xetex texlive-lang-chinese` |
 | Arch | `sudo pacman -S texlive-xetex texlive-langchinese` |
 
-If user cannot or does not want to install LaTeX locally, offer alternative:
-> 也可以只生成 .tex 文件，然后上传到 Overleaf (https://www.overleaf.com) 在线编译。
+Wait for installation to complete, verify with `which xelatex`, then proceed.
 
-In this case, skip Phase 4 compilation and deliver `.tex` + `.sty` + figures as final output.
+If user explicitly refuses to install (rare), fallback: deliver `.tex` + `.sty` + figures, suggest Overleaf.
 
 ### 0.3 Beamer Template (Ask User First)
 
