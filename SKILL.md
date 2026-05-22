@@ -2,8 +2,9 @@
 name: beamer-academic
 description: >
   Generate high-quality academic Beamer slides from a thesis/paper (PDF, Word, or LaTeX source).
-  Supports thesis defense, proposal presentations, and conference talks. Built-in layout library
-  with 13 professional page types, 5 color schemes, and interactive editing loop.
+  Compatible with Claude Code and Codex. Supports thesis defense, proposal presentations, and
+  conference talks. Built-in layout library with 13 professional page types, 5 color schemes,
+  and interactive editing loop.
   Use when: (1) User asks to create thesis defense slides/PPT, (2) User wants to generate
   academic presentation from a paper, (3) User mentions beamer, 答辩PPT, 学术报告, 开题PPT,
   论文幻灯片, or academic slides, (4) User has a PDF/docx/tex thesis and wants presentation output.

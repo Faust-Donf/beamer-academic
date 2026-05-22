@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>一键从论文生成高质量学术答辩 Beamer 幻灯片</strong><br>
-  适用于 <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> 的 Skill，内置 13 种专业版式
+  适用于 <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> / <a href="https://openai.com/index/codex/">Codex</a> 等 AI 编程助手的 Skill，内置 13 种专业版式
 </p>
 
 <p align="center">
