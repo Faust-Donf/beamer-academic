@@ -217,10 +217,9 @@ Only after final confirmation, save the approved structure to `outline.md` for P
 
 ### Why In-Conversation Instead of File
 
-- Many users don't know how to open/read .md files
-- Conversation is the natural interaction medium in Claude Code
-- Iterative refinement is faster in chat (no "go check that file" round-trip)
-- Each chapter gets individual attention instead of one overwhelming dump
+- Users who don't know markdown can follow along naturally in chat
+- Iterative refinement is faster (no "go check that file" round-trip)
+- Each chapter gets individual attention
 
 ### Layout Selection Rules (used in 2.2 per-page assignment)
 
@@ -298,45 +297,88 @@ The TOC page (P2) must use Chinese numbering with em-dash subtitles:
 
 ### Critical: Anti-AI Writing Style (NO Bullet List Abuse)
 
-**The #1 sign of AI-generated slides is overuse of `\begin{itemize}` bullet lists.**
+**The #1 sign of AI-generated slides is overuse of `\begin{itemize}` and uniform page structure.**
 
-Rules:
-- **80% of text-only pages must use paragraph style** (连贯段落), NOT bullet points
-- `\item` lists are ONLY acceptable for: innovation points, limitations, future work (list layout)
-- For explaining a concept: write 2-3 flowing paragraphs with `\vskip0.2cm` between them
-- For describing a method: use paragraph + inline `\alert{}` keywords, NOT itemized steps
-- Use `\textbf{关键词}\,——\,解释文字` pattern for inline emphasis instead of bullets
-- Use `\keybox{}` for a single key conclusion, NOT a list of conclusions
+#### Rule 1: Each page should COMBINE multiple elements
 
-Bad (AI味重):
-```latex
-\begin{itemize}
-  \item Self-attention 复杂度为 $O(n^2 \cdot d)$
-  \item 顺序操作为 $O(1)$
-  \item 最大路径长度为 $O(1)$
-\end{itemize}
+A good slide is NOT "one type fills the page." It COMBINES elements:
+
+| Pattern | Example (from real defense PPT) |
+|---------|-------------------------------|
+| 段落 + keybox | 一段背景描述 → `\keybox{核心问题：...}` |
+| 段落 + 公式 + 段落 | 引入文字 → 居中公式 → 解释各符号 |
+| 引言 + enumerate | 一句引言 → `\enumerate` 用 `\textbf{标题}\,——\,解释` |
+| 段落 + 表格 + 结论 | 一段上下文 → booktabs 表 → 一段总结 |
+| columns(段落+内联标记) + 图 | 左侧用 `$\bullet$ \textbf{term}` 内联格式，右侧配图 |
+| 满版图 + 底部一句话 | tikz overlay 大图 + `\figcap{}` |
+
+#### Rule 2: NEVER generate uniform pages
+
+Bad (all pages look the same):
+```
+P4: paragraph + paragraph
+P5: paragraph + paragraph
+P6: paragraph + paragraph
+P7: paragraph + paragraph
 ```
 
-Good (段落化):
-```latex
-Self-Attention 的核心优势在于其\alert{常数级最大路径长度}——任意两个位置之间只需
-一步即可直接交互，远优于 RNN 的 $O(n)$ 和 CNN 的 $O(\log_k n)$。虽然每层复杂度为
-$O(n^2 \cdot d)$，但可通过高度优化的矩阵乘法实现，且顺序操作仅为 $O(1)$，
-天然支持\alert{完全并行化}训练。
+Good (rhythmic variety):
 ```
+P4: paragraph + paragraph (纯文段)
+P5: columns(paragraph + figure) (图文并排)
+P6: paragraph + \keybox{} (段落+核心问题框)
+P7: paragraph + formula + explanation (段落+公式+解读)
+P8: intro + enumerate (引言+列举)
+P9: paragraph + table + conclusion (段落+表格+总结)
+```
+
+#### Rule 3: Inline emphasis patterns (replace `\item`)
+
+Instead of `\begin{itemize}\item...\end{itemize}`, use these inline patterns:
+
+```latex
+% Pattern A: Bold term with em-dash explanation (inside enumerate only)
+\textbf{数据整合尺度不足}\,——\,多集中于单一埋藏库,缺乏门尺度统一整合;
+
+% Pattern B: Inline bullet in flowing text (inside columns)
+$\bullet$ \textbf{全局共享核心层} $x_{\text{core}}$:任意视角可估算的无量纲指标...
+
+% Pattern C: Alert keyword in paragraph
+本文提出\alert{VASM 框架}(View-aware Accretionary Shell Morphometrics),
+在壳体加积生长约束下,把特征向量分解为两层:
+
+% Pattern D: Keybox for single key conclusion
+\keybox{\textbf{核心问题}:这一外源环境冲击是否能在形态空间中留下\alert{可识别的结构性变点}?}
+```
+
+#### Rule 4: Enumerate style (when lists ARE needed)
+
+Only use `\enumerate` (NOT `\itemize`) for truly parallel items (创新点、不足、展望):
+```latex
+围绕...既有研究仍存若干局限,这亦是本文研究的出发点:  % 引言段落
+
+\vskip0.3cm
+
+\begin{enumerate}\setlength\itemsep{0.4em}
+  \item \textbf{数据整合尺度不足}\,——\,多集中于单一埋藏库;
+  \item \textbf{时间框架不统一}\,——\,分箱策略与年代对齐不一致;
+  \item \textbf{形态与丰富度分开处理}\,——\,缺乏联合时序框架;
+\end{enumerate}
+```
+
+Key: always have an **intro paragraph** before the list, and use `\textbf{title}\,——\,explanation` format.
 
 ### Content Quality Rules
 
 | Constraint | Value |
 |-----------|-------|
-| Text per page (text-only) | 150–200 chars, **paragraph style** |
+| Text per page (text-only) | 150–200 chars |
 | Text per page (with figure) | 100–150 chars |
 | Equations per page | max 2 |
 | Table rows | 3–8 |
 | `\alert{}` keywords per page | 1–2 |
-| Paragraph style | Full sentences, flowing paragraphs, NOT bullet lists |
-| `\item` usage | ONLY on list-layout pages (创新点/局限/展望) |
-| Inline emphasis | `\textbf{词}\,——\,解释` or `\alert{词}` |
+| Page structure | COMBINE multiple elements (段落+公式, 段落+keybox, 段落+表格+结论) |
+| `\itemize` | BANNED. Use `\enumerate` with intro paragraph when needed |
 
 ## Phase 4: Compilation & Layout Verification
 
