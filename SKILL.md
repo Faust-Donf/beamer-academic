@@ -250,16 +250,93 @@ Only after final confirmation, save the approved structure to `outline.md` for P
    - Fill slots with thesis content + extracted materials
 4. Close with `\end{document}`.
 
+### Critical: Section Divider = Outline Page (NOT full-color page)
+
+The section-divider page should be an **Outline page** that shows all chapters with the current
+chapter highlighted, NOT a full-color page with just a number. Use `\tableofcontents[currentsection]`
+or equivalent tabbing layout where current chapter is bold/colored and others are grayed out.
+
+Example (每章开头的分隔页):
+```latex
+\begin{frame}
+  \frametitle{Outline}
+  \tableofcontents[currentsection]
+\end{frame}
+```
+
+### Critical: TOC Page Format
+
+The TOC page (P2) must use Chinese numbering with em-dash subtitles:
+```latex
+\begin{frame}
+  \frametitle{汇报提纲}
+  \vskip0.3cm
+  {\footnotesize
+  \begin{tabbing}
+  \hspace{0.4cm}\=\hspace{0.6cm}\=\kill
+  \textbf{\color{accentcolor}一}\>\textbf{研究动机}\,——\,为什么需要新的序列建模方案\\[8pt]
+  \textbf{\color{accentcolor}二}\>\textbf{模型架构}\,——\,Transformer 的核心设计\\[8pt]
+  \textbf{\color{accentcolor}三}\>\textbf{实验结果}\,——\,翻译质量与消融分析\\[8pt]
+  \textbf{\color{accentcolor}四}\>\textbf{总结与展望}\,——\,贡献与未来方向\\
+  \end{tabbing}
+  }
+\end{frame}
+```
+
+### Critical: Figure Extraction from PDF
+
+**NEVER use full-page PDF screenshots as figures.** When source is PDF:
+
+1. Use `pdfimages -all paper.pdf materials/figures/` to extract embedded vector/raster images
+2. If `pdfimages` not available, use `mutool extract` or Python `PyMuPDF`
+3. If only `pdftoppm` is available, crop the figure region ONLY:
+   - First identify figure bounding box coordinates
+   - Use Python PIL to crop the figure out of the page image
+   - Remove surrounding text, page numbers, captions
+4. **Quality check**: if extracted figure contains visible paper text around it, it's WRONG — re-crop
+5. For well-known papers (Transformer, ResNet, etc.), consider re-drawing key diagrams with tikz
+
+### Critical: Anti-AI Writing Style (NO Bullet List Abuse)
+
+**The #1 sign of AI-generated slides is overuse of `\begin{itemize}` bullet lists.**
+
+Rules:
+- **80% of text-only pages must use paragraph style** (连贯段落), NOT bullet points
+- `\item` lists are ONLY acceptable for: innovation points, limitations, future work (list layout)
+- For explaining a concept: write 2-3 flowing paragraphs with `\vskip0.2cm` between them
+- For describing a method: use paragraph + inline `\alert{}` keywords, NOT itemized steps
+- Use `\textbf{关键词}\,——\,解释文字` pattern for inline emphasis instead of bullets
+- Use `\keybox{}` for a single key conclusion, NOT a list of conclusions
+
+Bad (AI味重):
+```latex
+\begin{itemize}
+  \item Self-attention 复杂度为 $O(n^2 \cdot d)$
+  \item 顺序操作为 $O(1)$
+  \item 最大路径长度为 $O(1)$
+\end{itemize}
+```
+
+Good (段落化):
+```latex
+Self-Attention 的核心优势在于其\alert{常数级最大路径长度}——任意两个位置之间只需
+一步即可直接交互，远优于 RNN 的 $O(n)$ 和 CNN 的 $O(\log_k n)$。虽然每层复杂度为
+$O(n^2 \cdot d)$，但可通过高度优化的矩阵乘法实现，且顺序操作仅为 $O(1)$，
+天然支持\alert{完全并行化}训练。
+```
+
 ### Content Quality Rules
 
 | Constraint | Value |
 |-----------|-------|
-| Text per page (text-only) | 150–200 chars |
+| Text per page (text-only) | 150–200 chars, **paragraph style** |
 | Text per page (with figure) | 100–150 chars |
 | Equations per page | max 2 |
 | Table rows | 3–8 |
 | `\alert{}` keywords per page | 1–2 |
-| Paragraph style | Full sentences, not bullet lists |
+| Paragraph style | Full sentences, flowing paragraphs, NOT bullet lists |
+| `\item` usage | ONLY on list-layout pages (创新点/局限/展望) |
+| Inline emphasis | `\textbf{词}\,——\,解释` or `\alert{词}` |
 
 ## Phase 4: Compilation & Layout Verification
 
