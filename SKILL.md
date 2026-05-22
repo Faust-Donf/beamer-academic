@@ -56,7 +56,27 @@ If user cannot or does not want to install LaTeX locally, offer alternative:
 
 In this case, skip Phase 4 compilation and deliver `.tex` + `.sty` + figures as final output.
 
-### 0.3 Configuration
+### 0.3 Beamer Template (Ask User First)
+
+Ask user about existing school beamer template:
+
+> 你的学校/课题组有现成的 beamer 模板吗？（比如导师或师兄给过的 .sty 文件）
+> - 有：请放到当前目录，我直接使用
+> - 没有：我来帮你找或用内置通用模板
+
+If user has a template: use it directly, skip the built-in theme.
+
+If user has NO template:
+1. Ask for school name
+2. Search for existing public beamer templates for that school:
+   - GitHub search: `{school name} beamer template`
+   - Common sources: Overleaf Gallery, CTAN
+3. If found: download and use (notify user which template)
+4. If not found: use built-in `assets/beamerthemeAcademic.sty` with school logo
+   - Ask: "你能提供学校 logo 图片吗？（放到当前目录即可）"
+   - If no logo available: search online for the school's logo, or proceed without logo
+
+### 0.4 Configuration
 
 Check for `config.yaml` in current directory:
 - Exists: read and use.
@@ -69,8 +89,9 @@ Required user info (ask if not in config):
 - Color preference: `blue` | `red` | `green` | `purple` | `teal`
 - Time limit (minutes): affects page count and content density
 - Language: thesis language vs. PPT language (e.g., 英文论文 → 中文PPT)
+- **Chapnote preference**: "每页要不要显示'对应论文 §X.X'的标注？"（some users find it helpful for committee, others find it cluttered）
 
-### 0.4 Language Strategy
+### 0.5 Language Strategy
 
 If thesis language ≠ PPT language, establish rules upfront:
 
@@ -143,22 +164,31 @@ This ensures:
 
 **This phase determines the entire presentation structure through conversation with the user. All confirmation happens IN THE CHAT — never ask user to open a file.**
 
+### 2.0 Chapter Structure Principle
+
+**Follow the thesis's own structure as the PRIMARY basis for PPT chapters.**
+
+- If thesis has explicit chapters (第一章...第四章): map directly to PPT chapters
+- If thesis has no chapters (like a conference paper with sections): group related sections into 3-5 logical chapters for the PPT
+- Do NOT invent arbitrary chapter divisions that don't match the thesis logic
+- The PPT chapter structure should feel natural to someone who has read the thesis
+
 ### 2.1 First Pass: Structure Proposal
 
 After reading the thesis, propose the high-level structure directly in conversation:
 
 > ## 📐 PPT 结构提案
 >
-> 根据你的论文，我建议这样安排：
+> 根据你的论文结构，我建议这样安排：
 >
 > **总页数**：42 页（约 20 分钟答辩）
 >
-> | 章 | 标题 | 页数 | 说明 |
-> |---|------|------|------|
-> | 一 | 研究背景与科学问题 | 8页 | 背景+命题+假设+创新点 |
-> | 二 | 数据构建与描述性分析 | 7页 | 数据来源+特征工程+时序总览 |
-> | 三 | 演化模式与驱动机制 | 15页 | H1+H2+H3 三个假设检验 |
-> | 四 | 结论与展望 | 5页 | 主要结论+局限+展望+成果 |
+> | 章 | 标题 | 页数 | 对应论文 | 说明 |
+> |---|------|------|---------|------|
+> | 一 | 研究背景与科学问题 | 8页 | 第1章 | 背景+命题+假设+创新点 |
+> | 二 | 数据构建与描述性分析 | 7页 | 第2章 | 数据来源+特征工程+时序总览 |
+> | 三 | 演化模式与驱动机制 | 15页 | 第3章 | H1+H2+H3 三个假设检验 |
+> | 四 | 结论与展望 | 5页 | 第4章 | 主要结论+局限+展望+成果 |
 >
 > **你觉得这个结构可以吗？** 可以告诉我：
 > - "第三章太长了，拆成两章"
@@ -299,74 +329,14 @@ The TOC page (P2) must use Chinese numbering with em-dash subtitles:
 
 **The #1 sign of AI-generated slides is overuse of `\begin{itemize}` and uniform page structure.**
 
-#### Rule 1: Each page should COMBINE multiple elements
+Core rules:
+1. Each page COMBINES multiple elements (段落+keybox, 段落+公式+段落, 段落+表格+结论)
+2. Adjacent pages MUST use different composition patterns
+3. `\begin{itemize}` is BANNED. Only `\enumerate` with intro paragraph allowed
+4. 80% of pages use paragraph-style writing, not bullet points
+5. Use inline patterns: `$\bullet$ \textbf{term}`, `\alert{keyword}`, `\textbf{title}\,——\,explanation`
 
-A good slide is NOT "one type fills the page." It COMBINES elements:
-
-| Pattern | Example (from real defense PPT) |
-|---------|-------------------------------|
-| 段落 + keybox | 一段背景描述 → `\keybox{核心问题：...}` |
-| 段落 + 公式 + 段落 | 引入文字 → 居中公式 → 解释各符号 |
-| 引言 + enumerate | 一句引言 → `\enumerate` 用 `\textbf{标题}\,——\,解释` |
-| 段落 + 表格 + 结论 | 一段上下文 → booktabs 表 → 一段总结 |
-| columns(段落+内联标记) + 图 | 左侧用 `$\bullet$ \textbf{term}` 内联格式，右侧配图 |
-| 满版图 + 底部一句话 | tikz overlay 大图 + `\figcap{}` |
-
-#### Rule 2: NEVER generate uniform pages
-
-Bad (all pages look the same):
-```
-P4: paragraph + paragraph
-P5: paragraph + paragraph
-P6: paragraph + paragraph
-P7: paragraph + paragraph
-```
-
-Good (rhythmic variety):
-```
-P4: paragraph + paragraph (纯文段)
-P5: columns(paragraph + figure) (图文并排)
-P6: paragraph + \keybox{} (段落+核心问题框)
-P7: paragraph + formula + explanation (段落+公式+解读)
-P8: intro + enumerate (引言+列举)
-P9: paragraph + table + conclusion (段落+表格+总结)
-```
-
-#### Rule 3: Inline emphasis patterns (replace `\item`)
-
-Instead of `\begin{itemize}\item...\end{itemize}`, use these inline patterns:
-
-```latex
-% Pattern A: Bold term with em-dash explanation (inside enumerate only)
-\textbf{数据整合尺度不足}\,——\,多集中于单一埋藏库,缺乏门尺度统一整合;
-
-% Pattern B: Inline bullet in flowing text (inside columns)
-$\bullet$ \textbf{全局共享核心层} $x_{\text{core}}$:任意视角可估算的无量纲指标...
-
-% Pattern C: Alert keyword in paragraph
-本文提出\alert{VASM 框架}(View-aware Accretionary Shell Morphometrics),
-在壳体加积生长约束下,把特征向量分解为两层:
-
-% Pattern D: Keybox for single key conclusion
-\keybox{\textbf{核心问题}:这一外源环境冲击是否能在形态空间中留下\alert{可识别的结构性变点}?}
-```
-
-#### Rule 4: Enumerate style (when lists ARE needed)
-
-Only use `\enumerate` (NOT `\itemize`) for truly parallel items (创新点、不足、展望):
-```latex
-围绕...既有研究仍存若干局限,这亦是本文研究的出发点:  % 引言段落
-
-\vskip0.3cm
-
-\begin{enumerate}\setlength\itemsep{0.4em}
-  \item \textbf{数据整合尺度不足}\,——\,多集中于单一埋藏库;
-  \item \textbf{时间框架不统一}\,——\,分箱策略与年代对齐不一致;
-  \item \textbf{形态与丰富度分开处理}\,——\,缺乏联合时序框架;
-\end{enumerate}
-```
-
-Key: always have an **intro paragraph** before the list, and use `\textbf{title}\,——\,explanation` format.
+**Read `references/writing-style.md` for 6 concrete composition patterns with LaTeX code examples.**
 
 ### Content Quality Rules
 
@@ -377,8 +347,19 @@ Key: always have an **intro paragraph** before the list, and use `\textbf{title}
 | Equations per page | max 2 |
 | Table rows | 3–8 |
 | `\alert{}` keywords per page | 1–2 |
-| Page structure | COMBINE multiple elements (段落+公式, 段落+keybox, 段落+表格+结论) |
-| `\itemize` | BANNED. Use `\enumerate` with intro paragraph when needed |
+| Page structure | COMBINE multiple elements (see writing-style.md) |
+| `\itemize` | BANNED |
+
+### Section Divider = Outline Page (Enforced)
+
+Every chapter boundary MUST use an Outline page (`\tableofcontents[currentsection]`).
+This provides visual rhythm and structural navigation for the audience.
+
+### Anti-AI Title & Content Check
+
+Before finalizing, check all titles and content. **Read `references/writing-style.md`** for the full red-flag list.
+
+Quick check: "这个标题/段落像答辩学生写的还是 AI 写的？" 如果像 AI，改到像人。
 
 ## Phase 4: Compilation & Layout Verification
 
