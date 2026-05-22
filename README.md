@@ -40,6 +40,14 @@
     <td><img src="docs/toc.png" width="380"></td>
   </tr>
   <tr>
+    <td align="center"><strong>TikZ 架构图（左文右图）</strong></td>
+    <td align="center"><strong>TikZ 多头注意力可视化</strong></td>
+  </tr>
+  <tr>
+    <td><img src="docs/tikz-architecture.png" width="380"></td>
+    <td><img src="docs/tikz-attention.png" width="380"></td>
+  </tr>
+  <tr>
     <td align="center"><strong>段落+公式组合</strong></td>
     <td align="center"><strong>段落+表格+结论</strong></td>
   </tr>
@@ -49,7 +57,7 @@
   </tr>
   <tr>
     <td align="center"><strong>实验结果表格</strong></td>
-    <td align="center"><strong>致谢页</strong></td>
+    <td align="center"><strong>致谢页（带 Logo）</strong></td>
   </tr>
   <tr>
     <td><img src="docs/full-image.png" width="380"></td>
