@@ -361,6 +361,28 @@ Before finalizing, check all titles and content. **Read `references/writing-styl
 
 Quick check: "这个标题/段落像答辩学生写的还是 AI 写的？" 如果像 AI，改到像人。
 
+### Figure & Table Numbering
+
+All figures and tables in the presentation MUST be numbered sequentially:
+
+- Figures: `图 1`, `图 2`, `图 3`... (using `\figcap{图 1\;描述文字}`)
+- Tables: in frame title or above table, mark as `表 1`, `表 2`...
+
+Example:
+```latex
+\figcap{图 1\;Transformer 编码器--解码器架构}
+\figcap{图 2\;多头注意力并行投影机制}
+```
+
+Table title pattern:
+```latex
+\frametitle{机器翻译 BLEU 对比（表 2）}
+% or inside the frame:
+{\small\textbf{表 1}\;不同层类型的复杂度对比}
+```
+
+Numbering must be consistent throughout — do not skip or repeat numbers.
+
 ## Phase 4: Compilation & Layout Verification
 
 ### 4.1 Compile
