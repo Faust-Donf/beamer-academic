@@ -1,0 +1,650 @@
+% !TEX program = xelatex
+% ============================================================
+% Attention Is All You Need — 论文报告 (25 pages)
+% Vaswani et al., NIPS 2017
+% ============================================================
+\documentclass[10pt, aspectratio=169, noamsthm]{beamer}
+\usepackage{beamerthemeAcademic}
+\useblue
+
+% ---------- 字体 ----------
+\usepackage{xeCJK}
+\setCJKmainfont{Songti SC}
+\setCJKsansfont{Heiti SC}
+\setCJKmonofont{STFangsong}
+
+% ---------- 数学与表格 ----------
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta, calc, shapes.geometric, decorations.pathreplacing}
+
+% ---------- 元信息 ----------
+\title[Transformer]{Attention Is All You Need}
+\subtitle{基于纯注意力机制的序列转导模型}
+\author[Vaswani]{Vaswani et al.}
+\institute[Google Brain]{Google Brain / Google Research}
+\date[NIPS 2017]{NIPS 2017}
+\setsupervisor{}
+\setmajor{}
+
+% ---------- 禁用自动 outline ----------
+\AtBeginSection[]{}
+
+\begin{document}
+
+% ============================================================
+% P1: Cover
+% ============================================================
+{
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \vskip1.2cm
+  \begin{center}
+    {\color{accentcolor}\rule{0.85\textwidth}{0.8pt}}\\[0.5cm]
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}Attention Is All You Need}\\[0.25cm]
+    {\color{textgray}\fontsize{11pt}{14pt}\selectfont 基于纯注意力机制的序列转导模型}\\[0.3cm]
+    {\color{accentcolor}\rule{0.85\textwidth}{0.8pt}}
+  \end{center}
+  \vskip0.8cm
+  \begin{center}
+    \begin{tabular}{r@{\;:\;}l}
+      \textbf{Authors} & Ashish Vaswani, Noam Shazeer, Niki Parmar et al. \\[4pt]
+      \textbf{Affiliation} & Google Brain / Google Research \\[4pt]
+      \textbf{Venue} & Neural Information Processing Systems (NIPS) 2017 \\
+    \end{tabular}
+  \end{center}
+  \vfill
+  \begin{center}
+    {\color{textgray}\scriptsize Paper Reading Presentation}
+  \end{center}
+  \vskip0.4cm
+\end{frame}
+}
+
+% ============================================================
+% P2: Table of Contents (tabbing format)
+% ============================================================
+\section*{目录}
+\begin{frame}{目录}
+\vskip0.4cm
+{\large
+\begin{tabbing}
+\hspace{1.5cm}\=\hspace{0.4cm}\=\kill
+\textcolor{accentcolor}{\bfseries 一} \> \textbf{研究背景与动机}\,——\,序列建模的瓶颈与注意力革命 \\[14pt]
+\textcolor{accentcolor}{\bfseries 二} \> \textbf{模型架构}\,——\,Transformer 的核心设计 \\[14pt]
+\textcolor{accentcolor}{\bfseries 三} \> \textbf{实验与结果}\,——\,机器翻译及其他任务验证 \\[14pt]
+\textcolor{accentcolor}{\bfseries 四} \> \textbf{总结与展望}\,——\,贡献、局限与未来方向 \\
+\end{tabbing}
+}
+\end{frame}
+
+% ============================================================
+% SECTION 1: 研究背景与动机
+% ============================================================
+\section{研究背景与动机}
+
+% P3: Outline page (section 1 highlighted)
+\begin{frame}{报告提纲}
+\tableofcontents[currentsection]
+\end{frame}
+
+% P4: paragraph + keybox
+\begin{frame}{序列建模的主流范式}
+\chapnote{Section 1 -- Introduction}
+
+在 Transformer 提出之前，循环神经网络（RNN）及其变体 LSTM、GRU 一直是序列建模领域的\alert{事实标准}。语言模型、机器翻译、语音识别等任务几乎无一例外地依赖循环架构来捕捉时序依赖关系。编码器--解码器（Encoder-Decoder）框架的确立更是让 RNN 成为序列转导任务的基石。
+
+\vskip0.2cm
+
+然而，循环结构的固有特性——按时间步逐一计算隐状态——决定了它在长序列上面临严峻挑战：梯度消失使得模型难以学习远距离依赖，而\alert{顺序计算}则彻底阻断了训练时的并行化可能，导致计算效率随序列长度线性下降。
+
+\vskip0.25cm
+
+\keybox{核心瓶颈：RNN 的顺序性使其无法并行化，$O(n)$ 的串行步骤成为长序列建模的根本性限制。即便引入注意力机制作为辅助，循环骨架的这一局限仍然无法被消除。}
+\end{frame}
+
+% P5: paragraph + formula + paragraph
+\begin{frame}{注意力机制的发展脉络}
+\chapnote{Section 1 -- Background: Attention in Seq2Seq}
+
+注意力机制最早由 Bahdanau et al.\ (2014) 引入序列到序列模型中，用于解决定长编码向量的信息瓶颈问题。其核心思想是允许解码器在每个时间步\alert{动态聚焦}源序列的不同位置，而非仅依赖最终隐状态。
+
+\vskip0.2cm
+
+经典的加性注意力计算形式为：
+\[
+\text{Attention}(\mathbf{q}, \mathbf{K}, \mathbf{V}) = \sum_{i} \alpha_i \mathbf{v}_i, \quad \alpha_i = \frac{\exp(e_i)}{\sum_j \exp(e_j)}, \quad e_i = \text{score}(\mathbf{q}, \mathbf{k}_i)
+\]
+
+\vskip0.2cm
+
+尽管注意力机制显著提升了翻译质量，但在 2017 年之前它始终被视为 RNN 的\alert{辅助组件}——用于增强信息流动，而非替代循环结构本身。没有人尝试过完全抛弃循环和卷积，构建一个纯注意力模型。
+\end{frame}
+
+% P6: paragraph + keybox (contribution)
+\begin{frame}{本文核心贡献}
+\chapnote{Section 1 -- Contribution Statement}
+
+Vaswani et al.\ 在本文中提出了一个大胆的假设：注意力机制本身已经足够强大，可以独立承担序列转导的全部建模任务，无需循环、无需卷积。基于这一假设，作者设计了 \alert{Transformer} 架构——一个完全依赖自注意力（Self-Attention）机制的编码器--解码器模型。
+
+\vskip0.2cm
+
+该模型在 WMT 2014 英德翻译任务上达到 28.4 BLEU，超越所有已有模型（包括集成模型）；在英法翻译上达到 41.8 BLEU 的新纪录，且训练成本仅为前最优模型的一小部分。
+
+\vskip0.25cm
+
+\keybox{Transformer：首个完全基于注意力的序列转导模型——抛弃循环与卷积，以 $O(1)$ 的顺序操作数连接任意两个位置，实现完全并行化训练。}
+\end{frame}
+
+% ============================================================
+% SECTION 2: 模型架构
+% ============================================================
+\section{模型架构}
+
+% P7: Outline page (section 2 highlighted)
+\begin{frame}{报告提纲}
+\tableofcontents[currentsection]
+\end{frame}
+
+% P8: columns layout - text left, tikz diagram right
+\begin{frame}{整体架构：编码器--解码器}
+\chapnote{Section 3 -- Model Architecture (Figure 1)}
+
+\begin{columns}[T]
+\begin{column}{0.44\textwidth}
+\vskip0.1cm
+Transformer 保留了经典的编码器--解码器宏观结构。编码器将输入符号序列 $(x_1, \ldots, x_n)$ 映射为连续表示 $\mathbf{z}$；解码器基于 $\mathbf{z}$ 自回归地生成输出 $(y_1, \ldots, y_m)$。
+
+\vskip0.2cm
+
+$\bullet$\; 编码器 $N{=}6$ 层，每层含\alert{多头自注意力} + 前馈网络
+
+\vskip0.12cm
+
+$\bullet$\; 解码器 $N{=}6$ 层，额外增加交叉注意力子层
+
+\vskip0.12cm
+
+$\bullet$\; 每个子层：\alert{残差连接} + 层归一化
+\end{column}
+\begin{column}{0.54\textwidth}
+\centering
+\begin{tikzpicture}[
+  scale=0.52, transform shape,
+  block/.style={rectangle, draw=accentcolor!80, fill=accentlight, minimum width=2.4cm, minimum height=0.5cm, font=\scriptsize, rounded corners=2pt, line width=0.4pt},
+  bigblock/.style={rectangle, draw=accentcolor, fill=accentcolor!8, minimum width=2.4cm, minimum height=0.5cm, font=\scriptsize\bfseries, rounded corners=2pt, line width=0.6pt},
+  arrow/.style={-{Stealth[length=3pt]}, accentcolor!70, line width=0.5pt},
+  lbl/.style={font=\tiny\color{textgray}},
+  brace/.style={decorate, decoration={brace, amplitude=4pt, raise=2pt}, accentcolor!60}
+]
+  % Encoder stack
+  \node[block] (emb1) at (0,0) {Input Embedding};
+  \node[block] (pe1) at (0,1.0) {Positional Encoding};
+  \node[bigblock] (sa1) at (0,2.3) {Multi-Head Self-Attn};
+  \node[block] (an1) at (0,3.3) {Add \& LayerNorm};
+  \node[bigblock] (ff1) at (0,4.3) {Feed Forward};
+  \node[block] (an2) at (0,5.3) {Add \& LayerNorm};
+
+  % Decoder stack
+  \node[block] (emb2) at (5.0,0) {Output Embedding};
+  \node[block] (pe2) at (5.0,1.0) {Positional Encoding};
+  \node[bigblock] (msa) at (5.0,2.3) {Masked Self-Attn};
+  \node[block] (an3) at (5.0,3.3) {Add \& LayerNorm};
+  \node[bigblock] (ca) at (5.0,4.3) {Cross-Attention};
+  \node[block] (an4) at (5.0,5.3) {Add \& LayerNorm};
+  \node[bigblock] (ff2) at (5.0,6.3) {Feed Forward};
+  \node[block] (an5) at (5.0,7.3) {Add \& LayerNorm};
+  \node[block] (out) at (5.0,8.3) {Linear + Softmax};
+
+  % Arrows encoder
+  \draw[arrow] (emb1) -- (pe1);
+  \draw[arrow] (pe1) -- (sa1);
+  \draw[arrow] (sa1) -- (an1);
+  \draw[arrow] (an1) -- (ff1);
+  \draw[arrow] (ff1) -- (an2);
+
+  % Arrows decoder
+  \draw[arrow] (emb2) -- (pe2);
+  \draw[arrow] (pe2) -- (msa);
+  \draw[arrow] (msa) -- (an3);
+  \draw[arrow] (an3) -- (ca);
+  \draw[arrow] (ca) -- (an4);
+  \draw[arrow] (an4) -- (ff2);
+  \draw[arrow] (ff2) -- (an5);
+  \draw[arrow] (an5) -- (out);
+
+  % Cross connection
+  \draw[arrow, dashed, line width=0.7pt, accentcolor] (an2.east) -- ++(0.8,0) |- (ca.west);
+
+  % Brace labels
+  \draw[brace] (-1.6,1.8) -- (-1.6,5.6) node[midway, left=6pt, font=\tiny\color{accentcolor}] {$\times N$};
+  \draw[brace] (7.0,1.8) -- (7.0,7.6) node[midway, right=6pt, font=\tiny\color{accentcolor}] {$\times N$};
+
+  % Labels
+  \node[lbl] at (0,-0.7) {Inputs};
+  \node[lbl] at (5.0,-0.7) {Outputs (shifted right)};
+  \node[lbl] at (5.0,9.0) {Output Probabilities};
+\end{tikzpicture}
+
+\figcap{Transformer 编码器--解码器架构}
+\end{column}
+\end{columns}
+\end{frame}
+
+% P9: formula page - Scaled Dot-Product Attention
+\begin{frame}{缩放点积注意力}
+\chapnote{Section 3.2.1 -- Scaled Dot-Product Attention}
+
+注意力函数的本质是将一个 Query 与一组 Key-Value 对映射为输出。Transformer 采用\alert{缩放点积注意力}（Scaled Dot-Product Attention），其计算效率远高于加性注意力，且可充分利用矩阵乘法硬件加速。
+
+\vskip0.3cm
+
+\[
+\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right) V
+\]
+
+\vskip0.3cm
+
+缩放因子 $1/\sqrt{d_k}$ 的引入至关重要：当 $d_k$ 较大时，点积的量级随维度增长，导致 softmax 进入梯度极小的饱和区域。除以 $\sqrt{d_k}$ 可将方差归一化至 1，使梯度保持在有效区间，确保训练稳定性。
+\end{frame}
+
+% P10: formula page - Multi-Head Attention
+\begin{frame}{多头注意力机制}
+\chapnote{Section 3.2.2 -- Multi-Head Attention}
+
+单一注意力函数只能学习一种"关注模式"。为了让模型同时从\alert{不同表示子空间}捕获信息，Transformer 引入了多头注意力——将 $Q$、$K$、$V$ 分别线性投影 $h$ 次，在每个投影空间中独立计算注意力，最后拼接并投影：
+
+\vskip0.25cm
+
+\[
+\text{MultiHead}(Q,K,V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)\, W^O
+\]
+\[
+\text{where}\quad \text{head}_i = \text{Attention}(Q W_i^Q,\; K W_i^K,\; V W_i^V)
+\]
+
+\vskip0.25cm
+
+本文使用 $h{=}8$ 个头，每个头的维度为 $d_k = d_v = d_{\text{model}}/h = 64$。由于每个头的维度降低，多头注意力的总计算量与全维度单头注意力几乎相同，但\alert{表达能力}显著增强。
+\end{frame}
+
+% P10b: Attention Visualization (tikz - Multi-Head Attention mechanism)
+\begin{frame}{多头注意力的并行投影机制}
+\chapnote{Section 3.2.2 -- Multi-Head Attention (Figure 2)}
+\vskip0.05cm
+
+\begin{columns}[T]
+\begin{column}{0.38\textwidth}
+\vskip0.3cm
+多头注意力将 $Q$, $K$, $V$ 分别通过 $h$ 组不同的线性投影映射到低维子空间，在每个子空间独立执行注意力计算后拼接。
+
+\vskip0.2cm
+
+这一设计允许模型同时关注\alert{不同位置的不同表示子空间}——某些头可能学习句法依赖，另一些则捕捉语义关联。
+\end{column}
+\begin{column}{0.60\textwidth}
+\centering
+\begin{tikzpicture}[
+  scale=0.48, transform shape,
+  box/.style={rectangle, draw=accentcolor!70, fill=accentlight, minimum width=1.6cm, minimum height=0.45cm, font=\tiny, rounded corners=1.5pt, line width=0.4pt},
+  headbox/.style={rectangle, draw=accentcolor, fill=accentcolor!15, minimum width=1.8cm, minimum height=0.45cm, font=\tiny\bfseries, rounded corners=1.5pt, line width=0.5pt},
+  arr/.style={-{Stealth[length=2.5pt]}, accentcolor!60, line width=0.4pt},
+  lbl/.style={font=\tiny\color{textgray}}
+]
+  % Input
+  \node[lbl] (q) at (0,0) {$Q$};
+  \node[lbl] (k) at (2.5,0) {$K$};
+  \node[lbl] (v) at (5.0,0) {$V$};
+
+  % Linear projections (h=3 shown)
+  \foreach \i/\c in {0/accentcolor!60, 1/accentcolor!40, 2/accentcolor!20} {
+    \node[box, fill=\c!30] (lq\i) at (0, 1.2+\i*0.7) {\tiny Linear};
+    \node[box, fill=\c!30] (lk\i) at (2.5, 1.2+\i*0.7) {\tiny Linear};
+    \node[box, fill=\c!30] (lv\i) at (5.0, 1.2+\i*0.7) {\tiny Linear};
+  }
+
+  % Attention heads
+  \node[headbox] (h1) at (2.5, 4.2) {Attention Head 1};
+  \node[headbox] (h2) at (2.5, 5.2) {Attention Head 2};
+  \node[headbox] (h3) at (2.5, 6.2) {Attention Head $h$};
+
+  % Concat + Linear
+  \node[headbox, fill=accentcolor!25, minimum width=3cm] (concat) at (2.5, 7.5) {Concat};
+  \node[headbox, fill=accentcolor!25, minimum width=3cm] (final) at (2.5, 8.5) {Linear $W^O$};
+
+  % Arrows from input to projections
+  \draw[arr] (q) -- (lq0);
+  \draw[arr] (k) -- (lk0);
+  \draw[arr] (v) -- (lv0);
+
+  % Arrows to heads
+  \draw[arr] (lq0.north) -- ++(0, 0.3) -| (h1.south west);
+  \draw[arr] (lk0.north) -- ++(0, 0.3) -| (h1.south);
+  \draw[arr] (lv0.north) -- ++(0, 0.3) -| (h1.south east);
+  \draw[arr] (lq1.north) -- ++(0, 0.2) -| (h2.south west);
+  \draw[arr] (lq2.north) -- ++(0, 0.1) -| (h3.south west);
+
+  % Heads to concat
+  \draw[arr] (h1.north) -- (concat.south west);
+  \draw[arr] (h2.north) -- (concat.south);
+  \draw[arr] (h3.north) -- (concat.south east);
+  \draw[arr] (concat) -- (final);
+
+  % Dots between heads
+  \node[font=\small, color=textgray] at (2.5, 5.7) {$\vdots$};
+
+  % Output label
+  \node[lbl] at (2.5, 9.2) {Multi-Head Output};
+
+  % Side annotation
+  \node[lbl, text width=1.8cm, align=center] at (7.0, 4.5) {$h=8$\\$d_k=d_v=64$\\$d_{\text{model}}=512$};
+\end{tikzpicture}
+\figcap{多头注意力：并行投影 + 独立计算 + 拼接}
+\end{column}
+\end{columns}
+\end{frame}
+
+% P11: paragraph + inline bullets (Encoder stack)
+\begin{frame}{编码器层的内部结构}
+\chapnote{Section 3.1 -- Encoder}
+
+编码器由 $N{=}6$ 个结构相同的层堆叠组成。每一层的前向计算包含两个子层，且在每个子层周围都套用了相同的"包裹"策略来稳定深层训练。
+
+\vskip0.2cm
+
+$\bullet$\; \textbf{子层 1：多头自注意力}\,——\,所有 Query、Key、Value 均来自前一层输出，模型借此对输入序列中任意两个位置建立直接依赖
+
+\vskip0.15cm
+
+$\bullet$\; \textbf{子层 2：位置前馈网络}\,——\,两层全连接 $\text{FFN}(x) = \max(0,\; xW_1{+}b_1)W_2{+}b_2$，隐层维度 $d_{ff}{=}2048$，逐位置独立作用
+
+\vskip0.15cm
+
+$\bullet$\; \textbf{残差 + 层归一化}\,——\,每个子层的输出为 $\text{LayerNorm}(x + \text{Sublayer}(x))$，残差连接使梯度直通深层，LayerNorm 控制激活尺度
+
+\vskip0.2cm
+
+为兼容残差路径，模型所有子层及嵌入层的输出维度统一为 $d_{\text{model}}{=}512$。这一设计使得\alert{层数的增加}不会改变张量形状，模块可任意堆叠。
+\end{frame}
+
+% P12: paragraph + formula + paragraph (Positional Encoding)
+\begin{frame}{位置编码}
+\chapnote{Section 3.5 -- Positional Encoding}
+
+Transformer 完全抛弃了循环与卷积，因此对输入序列没有任何固有的\alert{位置感知能力}。为弥补这一缺陷，模型在输入嵌入上叠加了正弦位置编码，向每个位置注入唯一的位置信号。
+
+\vskip0.25cm
+
+\[
+PE_{(pos,2i)} = \sin\!\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right), \quad
+PE_{(pos,2i+1)} = \cos\!\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)
+\]
+
+\vskip0.25cm
+
+正弦编码的关键优势在于：对于任何固定偏移量 $k$，$PE_{pos+k}$ 可以表示为 $PE_{pos}$ 的线性函数，因此模型可以轻松学习\alert{相对位置}关系。此外，正弦编码使模型能够外推到训练中未见过的更长序列长度，无需额外学习参数。
+\end{frame}
+
+% P13: paragraph + table + conclusion
+\begin{frame}{为什么选择自注意力？}
+\chapnote{Section 4 -- Why Self-Attention (Table 1)}
+
+自注意力与循环层、卷积层相比，在三个关键维度上具有优势：每层计算复杂度、可并行化程度、以及最长路径长度（学习远距离依赖的难度）。
+
+\vskip0.2cm
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{层类型} & \textbf{每层复杂度} & \textbf{顺序操作数} & \textbf{最长路径} \\
+\midrule
+Self-Attention    & $O(n^2 \cdot d)$ & $O(1)$   & $O(1)$ \\
+Recurrent         & $O(n \cdot d^2)$ & $O(n)$   & $O(n)$ \\
+Convolutional     & $O(k \cdot n \cdot d^2)$ & $O(1)$ & $O(\log_k n)$ \\
+Self-Attn (restricted) & $O(r \cdot n \cdot d)$ & $O(1)$ & $O(n/r)$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vskip0.2cm
+
+当序列长度 $n < d_{\text{model}}$ 时（如典型句子长度），自注意力在计算量上也优于循环层。更重要的是，其 $O(1)$ 的最长路径使任意位置间的信息传递\alert{无需中间步骤}。
+\end{frame}
+
+% P14: transition - paragraph + keybox
+\begin{frame}{从设计到验证}
+\chapnote{Transition}
+
+至此，Transformer 的核心设计已经完整呈现：完全并行化的自注意力取代了循环计算，多头机制赋予模型多视角表示能力，残差与归一化保障了深层训练的稳定性，正弦编码注入了位置信息。
+
+\vskip0.25cm
+
+接下来的关键问题是：这一纯注意力架构能否在实际任务中匹配甚至超越经过多年优化的 RNN/CNN 模型？
+
+\vskip0.25cm
+
+\keybox{验证策略：作者选择机器翻译（WMT 2014 EN-DE \& EN-FR）作为主实验，辅以消融实验解析各设计决策的贡献，并在英语成分句法分析上测试泛化能力。}
+\end{frame}
+
+% ============================================================
+% SECTION 3: 实验与结果
+% ============================================================
+\section{实验与结果}
+
+% P15: Outline page (section 3 highlighted)
+\begin{frame}{报告提纲}
+\tableofcontents[currentsection]
+\end{frame}
+
+% P16: text-only flowing paragraph (training setup)
+\begin{frame}{训练配置}
+\chapnote{Section 5.1 -- Training Data and Batching; Section 5.2 -- Hardware and Schedule}
+
+训练数据方面，英德翻译使用 WMT 2014 数据集中约 450 万句对，采用 BPE 编码构建约 37000 词的共享词表；英法翻译则使用更大规模的 3600 万句对，词表大小约 32000。句对按近似长度分组为 batch，每个 batch 包含约 25000 个源语言 token 和 25000 个目标语言 token。
+
+\vskip0.2cm
+
+硬件方面，模型在 8 块 NVIDIA P100 GPU 上训练。基础模型（$d_{\text{model}}{=}512$）的每个训练步耗时约 0.4 秒，共训练 100K 步（约 12 小时）；大模型（$d_{\text{model}}{=}1024$）每步约 1.0 秒，训练 300K 步（约 3.5 天）。
+
+\vskip0.2cm
+
+优化器使用 Adam（$\beta_1{=}0.9$, $\beta_2{=}0.98$, $\epsilon{=}10^{-9}$），并采用作者提出的 warmup 学习率调度：前 4000 步线性增加学习率，之后按步数的平方根倒数\alert{衰减}。正则化则结合了残差 Dropout（$P_{drop}{=}0.1$）和标签平滑（$\epsilon_{ls}{=}0.1$）。
+\end{frame}
+
+% P17: paragraph + table + conclusion (MT results)
+\begin{frame}{机器翻译结果}
+\chapnote{Section 6.1 -- Machine Translation (Table 2)}
+
+在 WMT 2014 测试集上，Transformer 与当时的最优模型进行了全面对比。结果表明其在翻译质量和训练效率上均取得了显著突破。
+
+\vskip0.15cm
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{模型} & \textbf{类型} & \textbf{EN-DE BLEU} & \textbf{EN-FR BLEU} \\
+\midrule
+ByteNet              & CNN         & 23.75 & ---  \\
+Deep-Att + PosUnk    & RNN+Attn    & ---   & 39.2 \\
+GNMT + RL            & RNN+Attn    & 24.6  & 39.92 \\
+ConvS2S              & CNN         & 25.16 & 40.46 \\
+\midrule
+Transformer (base)   & Self-Attn   & 27.3  & 38.1 \\
+\textbf{Transformer (big)} & \textbf{Self-Attn} & \textbf{28.4} & \textbf{41.8} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vskip0.15cm
+
+Transformer (big) 在英德上超越此前最优 \alert{+2.0 BLEU}，英法上达到 41.8 BLEU 的新纪录，且训练成本仅为前最优模型的 $1/4$。
+\end{frame}
+
+% P18: paragraph + keybox (interpreting results)
+\begin{frame}{结果解读}
+\chapnote{Section 6.1 -- Analysis}
+
+Transformer 的成功不仅仅体现在 BLEU 分数的绝对值上。更值得关注的是"效率--质量"的帕累托前沿被大幅前移：此前 RNN 集成模型需要数周训练才能达到的精度水平，现在一个单模型在 3.5 天内即可超越。
+
+\vskip0.2cm
+
+这一效率提升直接来源于自注意力的\alert{并行性}：所有位置对的交互在一次矩阵运算中完成，无需像 RNN 那样逐步展开。GPU 的大规模并行计算能力被充分释放，训练吞吐量数倍于同规模的循环模型。
+
+\vskip0.25cm
+
+\keybox{核心启示：Transformer 证明了"更简单的架构 + 更高效的计算利用 = 更好的结果"这一工程范式。模型质量的提升不再依赖于更复杂的结构设计，而是依赖于更大的有效训练规模。}
+\end{frame}
+
+% P19: paragraph + table (ablation study)
+\begin{frame}{消融实验}
+\chapnote{Section 6.2 -- Model Variations (Table 3)}
+
+为量化各设计决策的贡献，作者在英德 newstest2013 开发集上系统地变化了模型超参数，观察性能变化。
+
+\vskip0.15cm
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{变体} & $h$ & $d_k$ & $d_{\text{model}}$ & \textbf{BLEU} \\
+\midrule
+Base (参考)        & 8  & 64  & 512  & 25.8 \\
+单头注意力         & 1  & 512 & 512  & 24.9 \\
+过多头 (16头)     & 16 & 32  & 512  & 25.5 \\
+$d_k$ 减小        & 8  & 32  & 512  & 25.2 \\
+模型增大          & 16 & 64  & 1024 & 26.2 \\
+无位置编码        & 8  & 64  & 512  & 24.5 \\
+可学习位置编码    & 8  & 64  & 512  & 25.7 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vskip0.15cm
+
+关键发现：\alert{注意力头数}影响显著（单头下降 0.9）、位置编码不可或缺（去除后下降 1.3）、正弦编码与可学习编码效果相当。
+\end{frame}
+
+% P20: text-only paragraphs (ablation interpretation)
+\begin{frame}{消融实验的启示}
+\chapnote{Section 6.2 -- Discussion}
+
+消融实验揭示了 Transformer 设计空间中的若干重要规律。首先，多头注意力的价值在于\alert{多样性}而非单纯的容量：8 头优于 1 头不是因为参数更多（总计算量相同），而是因为 8 个独立的注意力模式能够同时捕捉不同类型的语言关系——位置关系、句法关系、语义关系等。
+
+\vskip0.2cm
+
+其次，$d_k$ 的选择需要在"注意力锐度"与"计算效率"之间取得平衡。过小的 $d_k$ 导致区分度下降（不同 Key 之间的点积差异变小），而过大则意味着头数必须减少。$d_k{=}64$ 恰好在这两端之间找到了甜蜜点。
+
+\vskip0.2cm
+
+最后，位置编码的消融实验（$-$1.3 BLEU）有力证明了位置信息对序列建模的\alert{必要性}——纯注意力机制本身是排列不变的，没有位置编码的 Transformer 等价于一个"词袋模型+全局交互"，丧失了处理语序的能力。
+\end{frame}
+
+% P21: paragraph + table + conclusion (constituency parsing)
+\begin{frame}{英语成分句法分析}
+\chapnote{Section 6.3 -- English Constituency Parsing (Table 4)}
+
+为验证 Transformer 在翻译以外任务上的\alert{泛化能力}，作者将其应用于英语成分句法分析——一个结构化预测任务，输出受制于强嵌套约束。
+
+\vskip0.15cm
+
+\begin{center}
+\footnotesize
+\begin{tabular}{@{}lcc@{}}
+\toprule
+\textbf{模型} & \textbf{WSJ 23 F1} & \textbf{训练数据} \\
+\midrule
+Vinyals \& Kaiser (2015) & 88.3 & WSJ only \\
+Dyer et al.\ (2016) -- 判别式 & 91.7 & WSJ only \\
+Transformer (4 layers) & 91.3 & WSJ only \\
+\midrule
+Zhu et al.\ (2013) & 90.4 & semi-supervised \\
+Huang \& Harper (2009) & 91.3 & semi-supervised \\
+Transformer (4 layers) & \textbf{92.7} & semi-supervised \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vskip0.15cm
+
+即使在仅 40K 训练句的 WSJ-only 设置下，4 层 Transformer 已达到 91.3 F1；利用半监督数据后达到 \alert{92.7 F1}，证明了架构的跨任务普适性。
+\end{frame}
+
+% ============================================================
+% SECTION 4: 总结与展望
+% ============================================================
+\section{总结与展望}
+
+% P22: Outline page (section 4 highlighted)
+\begin{frame}{报告提纲}
+\tableofcontents[currentsection]
+\end{frame}
+
+% P23: intro paragraph + enumerate
+\begin{frame}{主要结论}
+\chapnote{Section 7 -- Conclusion}
+
+本文的核心贡献可以凝练为以下三点，它们共同标志着序列建模范式的根本性转变：
+
+\vskip0.3cm
+
+\begin{enumerate}
+\item \textbf{架构创新}\,——\,首次证明了\alert{纯注意力机制}足以完成序列转导任务，彻底消除了对循环和卷积结构的依赖，实现了 $O(1)$ 顺序操作的全并行训练
+\item \textbf{性能突破}\,——\,在机器翻译基准上以显著优势超越所有已有方法，WMT EN-DE +2.0 BLEU、EN-FR 达到 41.8 BLEU 新纪录，且训练成本大幅降低
+\item \textbf{范式影响}\,——\,Transformer 的成功开启了"预训练+微调"的大模型时代，BERT、GPT 系列、T5 等后续工作均以 Transformer 为基础架构，其影响远超机器翻译本身
+\end{enumerate}
+\end{frame}
+
+% P24: text-only paragraph (future directions)
+\begin{frame}{未来方向}
+\chapnote{Section 7 -- Future Work}
+
+作者在论文结尾展望了 Transformer 的多个延伸方向。首先是将注意力机制扩展到\alert{图像、音频和视频}等非文本模态——这些信号具有巨大的输入规模，需要发展局部或稀疏的注意力变体来控制计算量。事实上，后续的 Vision Transformer (ViT) 和 Audio Spectrogram Transformer 已经部分实现了这一愿景。
+
+\vskip0.2cm
+
+其次是让生成过程\alert{更少顺序性}。尽管 Transformer 的编码器实现了完全并行化，解码器仍然是自回归的——每次只生成一个 token。非自回归翻译（Non-Autoregressive Translation）和并行解码方法旨在打破这一瓶颈，以牺牲少量质量换取数倍解码加速。
+
+\vskip0.2cm
+
+作者还提出了将自注意力与局部约束结合的思路——这预示了后来的 Longformer、BigBird 等高效注意力架构，它们通过稀疏注意力模式将复杂度从 $O(n^2)$ 降低至 $O(n\log n)$ 或 $O(n)$，从而处理长达数万 token 的文档。
+\end{frame}
+
+% ============================================================
+% P25: Thanks page (elegant text-only, no logo)
+% ============================================================
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[accentcolor] (current page.north west) rectangle
+      ([yshift=-0.10cm]current page.north east);
+    \fill[accentcolor] ([yshift=0.10cm]current page.south west) rectangle
+      (current page.south east);
+  \end{tikzpicture}
+  \vbox to \paperheight\bgroup
+    \vfill
+    \begin{center}
+      {\color{accentcolor}\sffamily\fontsize{11pt}{13pt}\selectfont\addfontfeature{LetterSpace=18.0}THANK YOU}
+    \end{center}
+    \vskip1.5cm
+    \begin{center}
+      {\color{accentcolor}\rule{2cm}{0.4pt}\hspace{0.8cm}{\small$\bullet$}\hspace{0.8cm}\rule{2cm}{0.4pt}}
+    \end{center}
+    \vskip1.2cm
+    \begin{center}
+      {\color{accentcolor}\sffamily\fontsize{30pt}{38pt}\selectfont\bfseries Thank You!}\\[0.5cm]
+      {\color{accentcolor!70}\sffamily\fontsize{18pt}{22pt}\selectfont Questions?}
+    \end{center}
+    \vskip1.5cm
+    \begin{center}
+      {\color{textgray}\sffamily\fontsize{9pt}{11pt}\selectfont Vaswani et al.\;\;$\cdot$\;\;Google Brain / Google Research\;\;$\cdot$\;\;NIPS 2017}
+    \end{center}
+    \vfill
+  \egroup
+\end{frame}
+
+\end{document}
