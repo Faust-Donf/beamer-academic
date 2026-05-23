@@ -105,15 +105,17 @@ sudo dnf install texlive-xetex texlive-xecjk
 sudo apt install texlive-xetex texlive-lang-chinese
 ```
 
-> **没有 LaTeX 环境？** 没关系！Skill 会生成 `.tex` 源文件，你可以上传到 [Overleaf](https://www.overleaf.com) 在线编译。
+> **没有 LaTeX 环境？** Skill 会帮你安装，一条命令搞定。
 
 ### 论文输入格式
 
 | 格式 | 推荐度 | 说明 |
 |------|--------|------|
-| `.tex` | ⭐⭐⭐ | 最佳选择，图片和公式可直接复用 |
-| `.docx` | ⭐⭐ | Word 文件，图片质量好 |
-| `.pdf` | ⭐ | 可用，但图片提取可能有质量损失 |
+| `.tex` | ⭐⭐⭐ | **首选**——图片路径和公式可直接复用，零损耗 |
+| `.docx` | ⭐⭐⭐ | **推荐**——Word 文件图片质量完整，提取稳定 |
+| `.pdf` | ⚠️ | 不推荐——图片提取有质量损失，公式需重新识别 |
+
+> 💡 如果你有论文的 Word 或 LaTeX 源文件，**请优先使用**，不要转成 PDF 再给。
 
 ### 使用
 
