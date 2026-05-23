@@ -13,7 +13,6 @@
   <a href="https://github.com/Faust-Donf/beamer-academic/releases"><img src="https://img.shields.io/github/v/release/Faust-Donf/beamer-academic?color=blue&label=version" alt="version"></a>
   <a href="https://github.com/Faust-Donf/beamer-academic/stargazers"><img src="https://img.shields.io/github/stars/Faust-Donf/beamer-academic?style=social" alt="stars"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="license"></a>
-  <a href="https://xhslink.com/m/2JQ3fmTu6dz"><img src="https://img.shields.io/badge/小红书-23.7K赞-FF2442" alt="xiaohongshu"></a>
 </p>
 
 <p align="center">
