@@ -1,34 +1,38 @@
 <p align="center">
-  <img src="docs/cover.png" width="400" alt="Beamer Academic Cover">
+  <img src="docs/cover.png" width="420" alt="Beamer Academic Cover">
 </p>
 
 <h1 align="center">Beamer Academic</h1>
 
 <p align="center">
-  <strong>一键从论文生成高质量学术答辩 Beamer 幻灯片</strong><br>
-  适用于 <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> / <a href="https://openai.com/index/codex/">Codex</a> 等 AI 编程助手的 Skill，内置 13 种专业版式
+  <strong>论文丢进来，答辩 PPT 自动生成</strong><br>
+  <sub>适用于 <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> / <a href="https://openai.com/index/codex/">Codex</a> 的 AI Skill · 13 种版式 · 5 种配色 · 开箱即用</sub>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Faust-Donf/beamer-academic/releases"><img src="https://img.shields.io/github/v/release/Faust-Donf/beamer-academic?color=blue&label=version" alt="version"></a>
+  <a href="https://github.com/Faust-Donf/beamer-academic/stargazers"><img src="https://img.shields.io/github/stars/Faust-Donf/beamer-academic?style=social" alt="stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="license"></a>
+  <a href="https://xhslink.com/m/2JQ3fmTu6dz"><img src="https://img.shields.io/badge/小红书-23.7K赞-FF2442" alt="xiaohongshu"></a>
 </p>
 
 <p align="center">
   <a href="#快速开始">快速开始</a> •
   <a href="#效果展示">效果展示</a> •
   <a href="#版式库">版式库</a> •
+  <a href="examples/transformer/">查看示例</a> •
   <a href="#自定义">自定义</a>
 </p>
 
 ---
 
+> **一句话说清楚**：把你的论文 PDF/Word/LaTeX 放进来，说一句"帮我做答辩PPT"，就能拿到一份**可以直接上台答辩**的 Beamer 幻灯片。不需要会 LaTeX，不需要手动排版。
+
 ## 这是什么？
-
-把你的论文 PDF 丢进来，说一句"帮我做答辩PPT"，就能拿到一份 **可以直接上台答辩** 的 Beamer 幻灯片。
-
-不需要会 LaTeX。不需要手动排版。不需要起 4 个 Agent 手动传文件。
-
-**一个 Skill，端到端，从论文到 PDF。**
 
 ## 效果展示
 
-以下为使用本 Skill 生成的 Transformer 论文会议报告 PPT 截图：
+以下为使用本 Skill 从 *Attention Is All You Need* 论文自动生成的会议报告（[完整源码和 PDF](examples/transformer/)）：
 
 <table>
   <tr>
