@@ -251,11 +251,47 @@ beamer-academic/
 
 本 Skill 将以上全部封装为一条自动化管道 + 13 种结构化版式模板，开箱即用。
 
+## 为什么用 Beamer 而不是图片生成？
+
+市面上不少 AI PPT 工具走的是 image generation 路线（生成图片再拼幻灯片）。本项目选择 LaTeX/Beamer 路线，是经过答辩实战验证后的刻意选择：
+
+### ✅ 优势
+
+| 维度 | Beamer Academic | Image-based PPT |
+|------|----------------|-----------------|
+| **学术风险可控** | LaTeX 模板约束格式，经过导师审核的排版风格，不会出现"一看就是 AI 做的" | 视觉风格不确定，答辩委员会可能质疑 |
+| **内容严谨性** | 直接提取论文原图、原始公式、原始数据表格，保证与论文完全一致 | 图片重新生成，公式可能有误，数据可能失真 |
+| **可编辑性** | `.tex` 源码完全可控，任意修改任意一行文字、公式、表格 | 图片一旦生成，局部修改困难 |
+| **内容一致性** | 先生成 PRD 文档再填充，结构化保证内容与论文对齐 | 端到端生成，内容可能偏离论文本意 |
+| **可复现** | 同一 `.tex` 文件永远编译出相同 PDF | 每次生成结果不同 |
+
+### ⚠️ 局限
+
+| 维度 | 说明 |
+|------|------|
+| 视觉多样性 | Beamer 模板风格相对固定，没有图片生成类工具的视觉冲击力 |
+| 适用场景 | 当前版本专为学术报告设计（答辩/开题/会议），不适合商业路演或创意展示 |
+
+### 适合谁？
+
+- ✅ 研究生答辩、开题、中期检查
+- ✅ 学术会议 oral presentation
+- ✅ 课题组组会汇报
+- ❌ 商业融资路演
+- ❌ 产品发布会
+- ❌ 需要强视觉设计的创意场景
+
+## Star History
+
+<p align="center">
+  <a href="https://star-history.com/#Faust-Donf/beamer-academic&Date">
+    <img src="https://api.star-history.com/svg?repos=Faust-Donf/beamer-academic&type=Date" alt="Star History Chart" width="600">
+  </a>
+</p>
+
 ## 作者
 
-**Faustus** · [小红书主页](https://xhslink.com/m/2JQ3fmTu6dz)
-
-> 在小红书收获了 23.7K 次赞与收藏
+**Faustus** · [小红书](https://xhslink.com/m/2JQ3fmTu6dz)
 
 ## License
 
