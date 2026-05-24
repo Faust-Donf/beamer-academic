@@ -1,12 +1,13 @@
 <p align="center">
-  <img src="docs/cover.png" width="420" alt="Beamer Academic Cover">
+  <img src="docs/cover.png" width="420" alt="Beamer Academic">
 </p>
 
 <h1 align="center">Beamer Academic</h1>
 
 <p align="center">
-  <strong>论文丢进来，答辩 PPT 自动生成</strong><br>
-  <sub>适用于 <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> / <a href="https://openai.com/index/codex/">Codex</a> 的 AI Skill · 13 种版式 · 5 种配色 · 开箱即用</sub>
+  <strong>Drop your thesis in, get defense slides out.</strong><br>
+  <strong>论文丢进来，答辩 PPT 自动生成。</strong><br>
+  <sub>AI Skill for <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> / <a href="https://openai.com/index/codex/">Codex</a> &nbsp;·&nbsp; 13 Layouts &nbsp;·&nbsp; 5 Color Schemes &nbsp;·&nbsp; Works Out of the Box</sub>
 </p>
 
 <p align="center">
@@ -16,51 +17,68 @@
 </p>
 
 <p align="center">
-  <a href="#快速开始">快速开始</a> •
-  <a href="#效果展示">效果展示</a> •
-  <a href="#版式库">版式库</a> •
-  <a href="examples/transformer/">查看示例</a> •
-  <a href="#自定义">自定义</a>
+  <a href="#quick-start">Quick Start</a> •
+  <a href="#gallery">Gallery</a> •
+  <a href="#layouts">Layouts</a> •
+  <a href="examples/transformer/">Example</a> •
+  <a href="#customization">Customization</a>
 </p>
 
 ---
 
-> **一句话说清楚**：把你的论文 PDF/Word/LaTeX 放进来，说一句"帮我做答辩PPT"，就能拿到一份**可以直接上台答辩**的 Beamer 幻灯片。不需要会 LaTeX，不需要手动排版。
+> **TL;DR** — Give it your thesis (PDF / Word / LaTeX), say *"make my defense slides"*, and get a **ready-to-present** Beamer PDF. No LaTeX knowledge required.
+>
+> **一句话说清楚** — 把论文扔进来，说"帮我做答辩PPT"，就能拿到一份可以直接上台的 Beamer 幻灯片。不需要会 LaTeX。
 
-## 这是什么？
+---
 
-## 效果展示
+## What It Does / 这是什么
 
-以下为使用本 Skill 从 *Attention Is All You Need* 论文自动生成的会议报告（[完整源码和 PDF](examples/transformer/)）：
+An AI Skill (plugin) for Claude Code / Codex that turns your thesis into professional Beamer slides through a fully automated pipeline:
+
+一个 Claude Code / Codex 的 AI Skill（插件），通过全自动管道将论文转化为专业 Beamer 幻灯片：
+
+```
+Thesis / 论文  →  Extract / 素材提取  →  Outline / 大纲  →  Generate / 内容生成  →  PDF
+```
+
+You only confirm the outline. Everything else is automatic.  
+你只需确认大纲，其余全部自动完成。
+
+## Gallery / 效果展示
+
+Auto-generated from *Attention Is All You Need* ([full source & PDF](examples/transformer/)):
+
+以下为从 *Attention Is All You Need* 自动生成的示例（[完整源码和 PDF](examples/transformer/)）：
 
 <table>
   <tr>
-    <td align="center"><strong>封面页</strong></td>
-    <td align="center"><strong>目录页</strong></td>
+    <td align="center"><strong>Cover / 封面</strong></td>
+    <td align="center"><strong>TOC / 目录</strong></td>
   </tr>
   <tr>
     <td><img src="docs/cover.png" width="380"></td>
     <td><img src="docs/toc.png" width="380"></td>
   </tr>
   <tr>
-    <td align="center"><strong>TikZ 架构图（左文右图）</strong></td>
-    <td align="center"><strong>TikZ 多头注意力可视化</strong></td>
+    <td align="center"><strong>TikZ Architecture / TikZ 架构图</strong></td>
+    <td align="center"><strong>TikZ Multi-Head Attention / 多头注意力</strong></td>
   </tr>
   <tr>
     <td><img src="docs/tikz-architecture.png" width="380"></td>
     <td><img src="docs/tikz-attention.png" width="380"></td>
   </tr>
   <tr>
-    <td align="center"><strong>段落+公式组合</strong></td>
-    <td align="center"><strong>段落+表格+结论</strong></td>
+    <td align="center"><strong>Text + Formula / 段落+公式</strong></td>
+    <td align="center"><strong>Table + Conclusion / 表格+结论</strong></td>
   </tr>
   <tr>
     <td><img src="docs/text-image.png" width="380"></td>
     <td><img src="docs/table.png" width="380"></td>
   </tr>
   <tr>
-    <td align="center"><strong>实验结果表格</strong></td>
-    <td align="center"><strong>致谢页（带 Logo）</strong></td>
+    <td align="center"><strong>Full-page Figure / 满版图</strong></td>
+    <td align="center"><strong>Acknowledgement / 致谢</strong></td>
   </tr>
   <tr>
     <td><img src="docs/full-image.png" width="380"></td>
@@ -68,31 +86,35 @@
   </tr>
 </table>
 
-## 特性
+## Features / 特性
 
-| 能力 | 说明 |
-|------|------|
-| 一键生成 | 提供论文（.tex / .docx / .pdf），全流程自动 |
-| 13 种版式 | 封面、目录、分隔页、纯文段、左文右图、左图右文、公式、表格、满版图、结论框、过渡、列表、致谢 |
-| 交互修改 | 生成后按页码精准修改，无需懂 LaTeX |
-| 5 种配色 | 蓝/红/绿/紫/青，一行配置切换 |
-| 多场景 | 毕业答辩、开题报告、学术会议 |
-| 自动纠错 | 检测图文重叠、溢出等排版问题并自动修复 |
+| Capability / 能力 | EN | 中文 |
+|:--|:--|:--|
+| One-command | Provide thesis (.tex/.docx/.pdf), everything auto | 提供论文，全流程自动 |
+| 13 layouts | Cover, TOC, divider, text, image, formula, table, full-image, conclusion, transition, list, thanks | 封面、目录、分隔页、纯文段、左文右图、公式、表格、满版图、结论框、过渡、列表、致谢 |
+| Interactive edit | Modify by page number, no LaTeX needed | 按页码精准修改，无需懂 LaTeX |
+| 5 colors | Blue / Red / Green / Purple / Teal | 蓝/红/绿/紫/青，一行切换 |
+| Multi-scenario | Defense, proposal, conference | 毕业答辩、开题报告、学术会议 |
+| Auto error-fix | Detects overflow/overlap, auto-fixes | 自动检测溢出并修复 |
 
-## 快速开始
+## Quick Start / 快速开始
 
-### 安装
+### Installation / 安装
 
 ```bash
+# Claude Code
 git clone https://github.com/Faust-Donf/beamer-academic.git ~/.claude/skills/beamer-academic
+
+# Codex
+git clone https://github.com/Faust-Donf/beamer-academic.git ~/.codex/skills/beamer-academic
 ```
 
-### 前置依赖
+### Prerequisites / 前置依赖
 
-**LaTeX 环境**（推荐安装，非必须）：
+**LaTeX** (recommended / 推荐安装):
 
 ```bash
-# macOS（推荐 no-gui 版，体积小）
+# macOS
 brew install --cask mactex-no-gui
 
 # Ubuntu / Debian
@@ -105,181 +127,164 @@ sudo dnf install texlive-xetex texlive-xecjk
 sudo apt install texlive-xetex texlive-lang-chinese
 ```
 
-> **没有 LaTeX 环境？** Skill 会帮你安装，一条命令搞定。
+> No LaTeX? The Skill will guide you through setup.  
+> 没装 LaTeX？Skill 会引导你配置环境。
 
-### 论文输入格式
+### Input Format / 论文输入格式
 
-| 格式 | 推荐度 | 说明 |
-|------|--------|------|
-| `.tex` | ⭐⭐⭐ | **首选**——图片路径和公式可直接复用，零损耗 |
-| `.docx` | ⭐⭐⭐ | **推荐**——Word 文件图片质量完整，提取稳定 |
-| `.pdf` | ⚠️ | 不推荐——图片提取有质量损失，公式需重新识别 |
+| Format | Rec. | EN | 中文 |
+|:--|:--:|:--|:--|
+| `.tex` | ⭐⭐⭐ | **Best** — figures & formulas reused directly | **首选** — 图片和公式可直接复用 |
+| `.docx` | ⭐⭐⭐ | **Great** — full image quality | **推荐** — 图片质量完整 |
+| `.pdf` | ⚠️ | Not recommended — quality loss | 不推荐 — 图片有损耗 |
 
-> 💡 如果你有论文的 Word 或 LaTeX 源文件，**请优先使用**，不要转成 PDF 再给。
+> If you have the source file (Word / LaTeX), **use that instead of PDF**.  
+> 如果有 Word 或 LaTeX 源文件，**请优先使用**，不要转成 PDF。
 
-### 使用
+### Usage / 使用
 
 ```bash
-mkdir my-defense && cp 论文.docx my-defense/ && cd my-defense
+mkdir my-defense && cp thesis.docx my-defense/ && cd my-defense
 ```
 
-然后在 Claude Code 中说：
+Then say / 然后说:
 
-> 帮我做答辩PPT
+> "Make my defense slides" or "帮我做答辩PPT"
 
-或输入 `/beamer-academic`
+Or type / 或输入 `/beamer-academic`
 
-Skill 会问你几个基本信息（学校、姓名、导师、配色），然后全自动跑完。
+The Skill asks a few questions (university, name, advisor, color), then runs automatically.  
+Skill 会问几个基本信息（学校、姓名、导师、配色），然后全自动跑完。
 
-## 工作流程
+## How It Works / 工作流程
 
 ```
-论文.pdf ─┐
-          ▼
-   ┌──────────────┐
-   │  素材提取     │  图片 / 表格 / 公式 / 章节结构
-   └──────┬───────┘
-          ▼
-   ┌──────────────┐
-   │  大纲生成     │  自动分配 13 种版式
-   └──────┬───────┘
-          ▼
-   ┌──────────────┐
-   │ ★ 用户确认 ★ │  ← 唯一需要你动手的地方（说 ok 即可）
-   └──────┬───────┘
-          ▼
-   ┌──────────────┐
-   │  内容生成     │  逐页填充版式模板
-   └──────┬───────┘
-          ▼
-   ┌──────────────┐
-   │  编译出 PDF   │  xelatex × 2
-   └──────┬───────┘
-          ▼
-   ┌──────────────┐
-   │  交互修改     │  "P7公式太密了" → 自动拆页重编译
-   └──────────────┘
+Thesis / 论文 ──┐
+                ▼
+     ┌──────────────────┐
+     │  Extract / 素材   │  Figures, tables, formulas, structure
+     └────────┬─────────┘
+              ▼
+     ┌──────────────────┐
+     │  Outline / 大纲   │  Auto-assigns 13 layout types
+     └────────┬─────────┘
+              ▼
+     ┌──────────────────┐
+     │  ★ Confirm / 确认 │  ← Only manual step (say "ok")
+     └────────┬─────────┘
+              ▼
+     ┌──────────────────┐
+     │  Generate / 生成  │  Fills templates page by page
+     └────────┬─────────┘
+              ▼
+     ┌──────────────────┐
+     │  Compile / 编译   │  xelatex × 2
+     └────────┬─────────┘
+              ▼
+     ┌──────────────────┐
+     │  Edit Loop / 修改 │  "P7 too dense" → auto-split & recompile
+     └──────────────────┘
 ```
 
-## 版式库
+## Layouts / 版式库
 
-13 种经过实战验证的学术报告版式，覆盖答辩 PPT 的所有页面类型：
+13 battle-tested academic layouts / 13 种经过实战验证的学术版式:
 
-| 版式 | 文件 | 何时用 |
-|------|------|--------|
-| 封面 | `cover.tex` | 第一页 |
-| 目录 | `toc.tex` | 第二页，全文结构 |
-| 章节分隔 | `section-divider.tex` | 每章开头，全色底 |
-| 纯文段 | `text-only.tex` | 背景、动机、概念解释 |
-| 左文右图 | `text-left-image-right.tex` | 文字为主 + 图辅助 |
-| 左图右文 | `image-left-text-right.tex` | 图为主 + 文字解读 |
-| 公式 | `formula.tex` | 模型定义、核心方程 |
-| 表格 | `table.tex` | 实验结果、数据对比 |
-| 满版图 | `full-image.tex` | 时序图、热力图、大图 |
-| 结论框 | `conclusion-box.tex` | 核心结论高亮 |
-| 过渡 | `transition.tex` | 承上启下 |
-| 列表 | `list.tex` | 创新点、局限、展望 |
-| 致谢 | `thanks.tex` | 最后一页 |
+| Layout / 版式 | File | When / 何时用 |
+|:--|:--|:--|
+| Cover / 封面 | `cover.tex` | First page / 第一页 |
+| TOC / 目录 | `toc.tex` | Second page / 第二页 |
+| Section Divider / 章节分隔 | `section-divider.tex` | Chapter start / 每章开头 |
+| Text Only / 纯文段 | `text-only.tex` | Background, motivation / 背景、动机 |
+| Text + Image Right / 左文右图 | `text-left-image-right.tex` | Text-driven / 文字为主 |
+| Image + Text Right / 左图右文 | `image-left-text-right.tex` | Image-driven / 图为主 |
+| Formula / 公式 | `formula.tex` | Equations / 模型定义 |
+| Table / 表格 | `table.tex` | Results / 实验结果 |
+| Full Image / 满版图 | `full-image.tex` | Large diagrams / 大图 |
+| Conclusion / 结论框 | `conclusion-box.tex` | Key findings / 核心结论 |
+| Transition / 过渡 | `transition.tex` | Bridge / 承上启下 |
+| List / 列表 | `list.tex` | Contributions / 创新点 |
+| Thanks / 致谢 | `thanks.tex` | Final page / 最后一页 |
 
-每种版式的详细定义见 [`layouts/_registry.yaml`](layouts/_registry.yaml)。
-
-## 配色方案
+## Color Schemes / 配色方案
 
 ```yaml
 # assets/config.yaml
 color_scheme: "blue"   # blue | red | green | purple | teal
 ```
 
-| 方案 | 色值 | 推荐 |
-|------|------|------|
-| 蓝色 | `rgb(26, 58, 92)` | 理工科通用（默认） |
-| 红色 | `rgb(139, 0, 0)` | 人文社科 |
-| 绿色 | `rgb(0, 100, 60)` | 农林、环境、生科 |
-| 紫色 | `rgb(75, 0, 110)` | 文科、艺术 |
-| 青色 | `rgb(0, 80, 100)` | 医学、海洋 |
+| Scheme / 方案 | Color / 色值 | For / 推荐 |
+|:--|:--|:--|
+| Blue / 蓝 | `rgb(26, 58, 92)` | STEM / 理工科 (default) |
+| Red / 红 | `rgb(139, 0, 0)` | Humanities / 人文社科 |
+| Green / 绿 | `rgb(0, 100, 60)` | Agriculture, Env / 农林环境 |
+| Purple / 紫 | `rgb(75, 0, 110)` | Arts / 文科艺术 |
+| Teal / 青 | `rgb(0, 80, 100)` | Medicine / 医学海洋 |
 
-## 自定义
+## Customization / 自定义
 
-### 换成自己学校
+### Your University / 换成自己学校
 
 ```yaml
 # assets/config.yaml
 institution:
-  name: "你的大学"
-  department: "你的学院"
+  name: "Your University / 你的大学"
+  department: "Your Department / 你的学院"
   logo: "your-logo.png"
-  gate_image: "your-gate.png"   # 致谢页（可选）
+  gate_image: "your-gate.png"   # Thanks page (optional / 可选)
 
 color_scheme: "red"
 ```
 
-### 添加新版式
+### Add New Layouts / 添加新版式
 
-1. 在 `references/layouts.md` 中添加新的 layout section
-2. 在 `references/layout-registry.yaml` 中注册（定义 `when` 和 `slots`）
-3. 完成
+1. Add a layout section in `references/layouts.md`
+2. Register in `references/layout-registry.yaml` (define `when` and `slots`)
+3. Done / 完成
 
-## 项目结构
+## Why Beamer? / 为什么用 Beamer？
+
+Many AI tools generate slides as images. This project uses LaTeX/Beamer — a deliberate choice validated through real defenses.
+
+市面上不少 AI PPT 工具走图片生成路线。本项目选择 LaTeX/Beamer，是经过真实答辩验证的选择。
+
+| Dimension / 维度 | Beamer Academic | Image-based / 图片生成 |
+|:--|:--|:--|
+| **Academic safety / 学术安全** | Template-constrained, advisor-approved style / 模板约束，不会"一看就是AI" | Unpredictable style / 视觉不确定 |
+| **Accuracy / 准确性** | Extracts original figures & formulas / 原图原公式 | May contain errors / 可能有误 |
+| **Editability / 可编辑** | Full `.tex` source / 源码完全可控 | Hard to modify / 改动困难 |
+| **Reproducibility / 可复现** | Same `.tex` = same PDF / 永远一致 | Different each time / 每次不同 |
+
+### Best For / 适合谁
+
+- ✅ Thesis defense / 毕业答辩
+- ✅ Proposal defense / 开题报告
+- ✅ Conference talks / 学术会议
+- ✅ Lab meetings / 组会汇报
+- ❌ Business pitches / 商业路演
+- ❌ Product launches / 产品发布
+- ❌ Creative presentations / 创意设计
+
+## Project Structure / 项目结构
 
 ```
 beamer-academic/
-├── SKILL.md                           # 主技能文件（AI 读取）
+├── SKILL.md                    # Main skill file (AI reads this)
 ├── references/
-│   ├── layouts.md                     # 13 种版式 LaTeX 骨架
-│   ├── layout-registry.yaml          # 版式选型规则
-│   └── tex-header.md                  # .tex 文件头模板
+│   ├── layouts.md              # 13 layout LaTeX skeletons
+│   ├── layout-registry.yaml   # Layout selection rules
+│   └── tex-header.md          # .tex preamble template
 ├── assets/
-│   ├── beamerthemeAcademic.sty        # Beamer 主题文件
-│   └── config.yaml                    # 用户配置模板
+│   ├── beamerthemeAcademic.sty # Beamer theme file
+│   └── config.yaml            # User config template
 ├── scripts/
-│   └── compile.sh                     # 编译脚本
-├── docs/                              # README 展示截图
-└── README.md                          # 本文档
+│   ├── compile.sh             # Compilation script
+│   └── extract_figures.py     # Figure extraction (PDF/DOCX/LaTeX)
+├── examples/
+│   └── transformer/           # Full working example (26 pages)
+├── docs/                      # Screenshot gallery
+└── README.md
 ```
-
-## 背景故事
-
-这个项目源自我用 Claude Code 给自己做毕业答辩 PPT 的经历——做完被导师夸"PPT 很好"。
-
-我把这套工作流总结成 SOP 发到小红书后意外爆火。原始 SOP 需要手动起 4 个 Agent、来回传文件，门槛不低。于是我把整个流程封装成了一个 Skill：**一句话触发，全自动交付**。
-
-原始 SOP（4 步手动版）：
-1. Agent1：参考 PPT → beamer 模板
-2. Agent2：论文 → 素材库（图/表/公式）
-3. Agent3：论文 → 答辩大纲 PRD
-4. Agent4：模板 + 素材 + PRD → 最终 PPT
-
-本 Skill 将以上全部封装为一条自动化管道 + 13 种结构化版式模板，开箱即用。
-
-## 为什么用 Beamer 而不是图片生成？
-
-市面上不少 AI PPT 工具走的是 image generation 路线（生成图片再拼幻灯片）。本项目选择 LaTeX/Beamer 路线，是经过答辩实战验证后的刻意选择：
-
-### ✅ 优势
-
-| 维度 | Beamer Academic | Image-based PPT |
-|------|----------------|-----------------|
-| **学术风险可控** | LaTeX 模板约束格式，经过导师审核的排版风格，不会出现"一看就是 AI 做的" | 视觉风格不确定，答辩委员会可能质疑 |
-| **内容严谨性** | 直接提取论文原图、原始公式、原始数据表格，保证与论文完全一致 | 图片重新生成，公式可能有误，数据可能失真 |
-| **可编辑性** | `.tex` 源码完全可控，任意修改任意一行文字、公式、表格 | 图片一旦生成，局部修改困难 |
-| **内容一致性** | 先生成 PRD 文档再填充，结构化保证内容与论文对齐 | 端到端生成，内容可能偏离论文本意 |
-| **可复现** | 同一 `.tex` 文件永远编译出相同 PDF | 每次生成结果不同 |
-
-### ⚠️ 局限
-
-| 维度 | 说明 |
-|------|------|
-| 视觉多样性 | Beamer 模板风格相对固定，没有图片生成类工具的视觉冲击力 |
-| 适用场景 | 当前版本专为学术报告设计（答辩/开题/会议），不适合商业路演或创意展示 |
-
-### 适合谁？
-
-- ✅ 研究生答辩、开题、中期检查
-- ✅ 学术会议 oral presentation
-- ✅ 课题组组会汇报
-- ❌ 商业融资路演
-- ❌ 产品发布会
-- ❌ 需要强视觉设计的创意场景
 
 ## Star History
 
@@ -289,10 +294,16 @@ beamer-academic/
   </a>
 </p>
 
-## 作者
+## Contributing
 
-**Faustus** · [小红书](https://xhslink.com/m/2JQ3fmTu6dz)
+Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+欢迎贡献！请参阅 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+## Author / 作者
+
+**Faustus** · [Xiaohongshu / 小红书](https://xhslink.com/m/2JQ3fmTu6dz)
 
 ## License
 
-MIT
+[MIT](LICENSE)
