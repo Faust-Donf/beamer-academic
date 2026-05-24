@@ -1,38 +1,38 @@
-<p align="center">
-  <img src="docs/cover.png" width="420" alt="Beamer Academic">
-</p>
+<div align="center">
+  <img src="docs/cover.png" width="560" alt="Beamer Academic">
+  
+  <br><br>
 
-<h1 align="center">Beamer Academic</h1>
+  # Beamer Academic
 
-<p align="center">
-  <strong>Drop your thesis in, get defense slides out.</strong><br>
-  <strong>论文丢进来，答辩 PPT 自动生成。</strong><br>
-  <sub>AI Skill for <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> / <a href="https://openai.com/index/codex/">Codex</a> &nbsp;·&nbsp; 13 Layouts &nbsp;·&nbsp; 5 Color Schemes &nbsp;·&nbsp; Works Out of the Box</sub>
-</p>
+  **Drop your thesis in, get defense slides out.**<br>
+  **论文丢进来，答辩 PPT 自动生成。**
 
-<p align="center">
-  <a href="https://github.com/Faust-Donf/beamer-academic/releases"><img src="https://img.shields.io/github/v/release/Faust-Donf/beamer-academic?color=blue&label=version" alt="version"></a>
-  <a href="https://github.com/Faust-Donf/beamer-academic/stargazers"><img src="https://img.shields.io/github/stars/Faust-Donf/beamer-academic?style=social" alt="stars"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="license"></a>
-</p>
+  AI Skill for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) / [Codex](https://openai.com/index/codex/) · 13 Layouts · 5 Color Schemes · Works Out of the Box
 
-<p align="center">
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#gallery">Gallery</a> •
-  <a href="#layouts">Layouts</a> •
-  <a href="examples/transformer/">Example</a> •
-  <a href="#customization">Customization</a>
-</p>
+  <br>
+
+  [![Version](https://img.shields.io/github/v/release/Faust-Donf/beamer-academic?style=for-the-badge&color=0066cc&label=VERSION)](https://github.com/Faust-Donf/beamer-academic/releases)
+  [![Stars](https://img.shields.io/github/stars/Faust-Donf/beamer-academic?style=for-the-badge&color=f5a623&label=STARS)](https://github.com/Faust-Donf/beamer-academic/stargazers)
+  [![License](https://img.shields.io/badge/LICENSE-MIT-green?style=for-the-badge)](LICENSE)
+
+  <br>
+
+  [Quick Start](#-quick-start) · [Gallery](#-gallery) · [Layouts](#-layouts) · [Example](examples/transformer/) · [Customization](#-customization)
+
+  <br>
+</div>
 
 ---
 
-> **TL;DR** — Give it your thesis (PDF / Word / LaTeX), say *"make my defense slides"*, and get a **ready-to-present** Beamer PDF. No LaTeX knowledge required.
+> [!TIP]
+> **EN** — Give it your thesis (PDF / Word / LaTeX), say *"make my defense slides"*, and get a **ready-to-present** Beamer PDF. No LaTeX knowledge required.
 >
-> **一句话说清楚** — 把论文扔进来，说"帮我做答辩PPT"，就能拿到一份可以直接上台的 Beamer 幻灯片。不需要会 LaTeX。
+> **中文** — 把论文扔进来，说"帮我做答辩PPT"，就能拿到一份可以直接上台答辩的 Beamer 幻灯片。不需要会 LaTeX，不需要手动排版。
 
----
+<br>
 
-## What It Does / 这是什么
+## ✨ What It Does / 这是什么
 
 An AI Skill (plugin) for Claude Code / Codex that turns your thesis into professional Beamer slides through a fully automated pipeline:
 
@@ -45,11 +45,13 @@ Thesis / 论文  →  Extract / 素材提取  →  Outline / 大纲  →  Genera
 You only confirm the outline. Everything else is automatic.  
 你只需确认大纲，其余全部自动完成。
 
-## Gallery / 效果展示
+<br>
 
-Auto-generated from *Attention Is All You Need* ([full source & PDF](examples/transformer/)):
+## 🖼️ Gallery / 效果展示
 
-以下为从 *Attention Is All You Need* 自动生成的示例（[完整源码和 PDF](examples/transformer/)）：
+Auto-generated from *Attention Is All You Need* → [full source & PDF](examples/transformer/)
+
+以下为从 *Attention Is All You Need* 自动生成的示例 → [完整源码和 PDF](examples/transformer/)
 
 <table>
   <tr>
@@ -86,18 +88,40 @@ Auto-generated from *Attention Is All You Need* ([full source & PDF](examples/tr
   </tr>
 </table>
 
-## Features / 特性
+<br>
 
-| Capability / 能力 | EN | 中文 |
-|:--|:--|:--|
-| One-command | Provide thesis (.tex/.docx/.pdf), everything auto | 提供论文，全流程自动 |
-| 13 layouts | Cover, TOC, divider, text, image, formula, table, full-image, conclusion, transition, list, thanks | 封面、目录、分隔页、纯文段、左文右图、公式、表格、满版图、结论框、过渡、列表、致谢 |
-| Interactive edit | Modify by page number, no LaTeX needed | 按页码精准修改，无需懂 LaTeX |
-| 5 colors | Blue / Red / Green / Purple / Teal | 蓝/红/绿/紫/青，一行切换 |
-| Multi-scenario | Defense, proposal, conference | 毕业答辩、开题报告、学术会议 |
-| Auto error-fix | Detects overflow/overlap, auto-fixes | 自动检测溢出并修复 |
+## 🎯 Features / 特性
 
-## Quick Start / 快速开始
+<table>
+  <tr>
+    <td width="60" align="center">🚀</td>
+    <td><strong>One-command generation / 一键生成</strong><br>Provide thesis (.tex/.docx/.pdf), everything auto<br>提供论文，全流程自动</td>
+  </tr>
+  <tr>
+    <td align="center">📐</td>
+    <td><strong>13 page layouts / 13 种版式</strong><br>Cover, TOC, section divider, text-only, text+image, formula, table, full-image, conclusion, transition, list, thanks<br>封面、目录、分隔页、纯文段、左文右图、公式、表格、满版图、结论框、过渡、列表、致谢</td>
+  </tr>
+  <tr>
+    <td align="center">✏️</td>
+    <td><strong>Interactive editing / 交互修改</strong><br>Modify by page number after generation, no LaTeX needed<br>按页码精准修改，无需懂 LaTeX</td>
+  </tr>
+  <tr>
+    <td align="center">🎨</td>
+    <td><strong>5 color schemes / 5 种配色</strong><br>Blue / Red / Green / Purple / Teal — one-line config change<br>蓝/红/绿/紫/青，一行配置切换</td>
+  </tr>
+  <tr>
+    <td align="center">🎓</td>
+    <td><strong>Multi-scenario / 多场景</strong><br>Thesis defense, proposal, academic conference<br>毕业答辩、开题报告、学术会议</td>
+  </tr>
+  <tr>
+    <td align="center">🔧</td>
+    <td><strong>Auto error-fix / 自动纠错</strong><br>Detects and fixes overflow, overlap, and layout issues<br>自动检测图文重叠、溢出等排版问题并修复</td>
+  </tr>
+</table>
+
+<br>
+
+## 🚀 Quick Start / 快速开始
 
 ### Installation / 安装
 
@@ -111,7 +135,10 @@ git clone https://github.com/Faust-Donf/beamer-academic.git ~/.codex/skills/beam
 
 ### Prerequisites / 前置依赖
 
-**LaTeX** (recommended / 推荐安装):
+<details>
+<summary><kbd>LaTeX Installation / LaTeX 安装</kbd> (click to expand / 点击展开)</summary>
+
+<br>
 
 ```bash
 # macOS
@@ -127,17 +154,21 @@ sudo dnf install texlive-xetex texlive-xecjk
 sudo apt install texlive-xetex texlive-lang-chinese
 ```
 
-> No LaTeX? The Skill will guide you through setup.  
+</details>
+
+> [!NOTE]
+> No LaTeX installed? The Skill will guide you through setup.  
 > 没装 LaTeX？Skill 会引导你配置环境。
 
 ### Input Format / 论文输入格式
 
-| Format | Rec. | EN | 中文 |
-|:--|:--:|:--|:--|
-| `.tex` | ⭐⭐⭐ | **Best** — figures & formulas reused directly | **首选** — 图片和公式可直接复用 |
-| `.docx` | ⭐⭐⭐ | **Great** — full image quality | **推荐** — 图片质量完整 |
-| `.pdf` | ⚠️ | Not recommended — quality loss | 不推荐 — 图片有损耗 |
+| Format | | Notes |
+|:--|:--:|:--|
+| `.tex` | ⭐⭐⭐ | **Best / 首选** — figures & formulas reused directly / 图片公式直接复用 |
+| `.docx` | ⭐⭐⭐ | **Great / 推荐** — full image quality / 图片质量完整 |
+| `.pdf` | ⚠️ | **Not recommended / 不推荐** — quality loss / 有损耗 |
 
+> [!IMPORTANT]
 > If you have the source file (Word / LaTeX), **use that instead of PDF**.  
 > 如果有 Word 或 LaTeX 源文件，**请优先使用**，不要转成 PDF。
 
@@ -149,14 +180,18 @@ mkdir my-defense && cp thesis.docx my-defense/ && cd my-defense
 
 Then say / 然后说:
 
-> "Make my defense slides" or "帮我做答辩PPT"
+```
+"Make my defense slides"  or  "帮我做答辩PPT"
+```
 
-Or type / 或输入 `/beamer-academic`
+Or type / 或输入: `/beamer-academic`
 
-The Skill asks a few questions (university, name, advisor, color), then runs automatically.  
+The Skill asks a few questions (university, name, advisor, color), then runs the full pipeline automatically.  
 Skill 会问几个基本信息（学校、姓名、导师、配色），然后全自动跑完。
 
-## How It Works / 工作流程
+<br>
+
+## ⚙️ How It Works / 工作流程
 
 ```
 Thesis / 论文 ──┐
@@ -174,7 +209,7 @@ Thesis / 论文 ──┐
      └────────┬─────────┘
               ▼
      ┌──────────────────┐
-     │  Generate / 生成  │  Fills templates page by page
+     │  Generate / 生成  │  Fills layout templates page by page
      └────────┬─────────┘
               ▼
      ┌──────────────────┐
@@ -186,7 +221,9 @@ Thesis / 论文 ──┐
      └──────────────────┘
 ```
 
-## Layouts / 版式库
+<br>
+
+## 📐 Layouts / 版式库
 
 13 battle-tested academic layouts / 13 种经过实战验证的学术版式:
 
@@ -206,7 +243,11 @@ Thesis / 论文 ──┐
 | List / 列表 | `list.tex` | Contributions / 创新点 |
 | Thanks / 致谢 | `thanks.tex` | Final page / 最后一页 |
 
-## Color Schemes / 配色方案
+See [`layouts/_registry.yaml`](layouts/_registry.yaml) for detailed layout definitions.
+
+<br>
+
+## 🎨 Color Schemes / 配色方案
 
 ```yaml
 # assets/config.yaml
@@ -215,13 +256,15 @@ color_scheme: "blue"   # blue | red | green | purple | teal
 
 | Scheme / 方案 | Color / 色值 | For / 推荐 |
 |:--|:--|:--|
-| Blue / 蓝 | `rgb(26, 58, 92)` | STEM / 理工科 (default) |
-| Red / 红 | `rgb(139, 0, 0)` | Humanities / 人文社科 |
-| Green / 绿 | `rgb(0, 100, 60)` | Agriculture, Env / 农林环境 |
-| Purple / 紫 | `rgb(75, 0, 110)` | Arts / 文科艺术 |
-| Teal / 青 | `rgb(0, 80, 100)` | Medicine / 医学海洋 |
+| 🔵 Blue / 蓝 | `rgb(26, 58, 92)` | STEM / 理工科 (default) |
+| 🔴 Red / 红 | `rgb(139, 0, 0)` | Humanities / 人文社科 |
+| 🟢 Green / 绿 | `rgb(0, 100, 60)` | Agriculture, Env / 农林环境 |
+| 🟣 Purple / 紫 | `rgb(75, 0, 110)` | Arts / 文科艺术 |
+| 🔷 Teal / 青 | `rgb(0, 80, 100)` | Medicine / 医学海洋 |
 
-## Customization / 自定义
+<br>
+
+## 🛠️ Customization / 自定义
 
 ### Your University / 换成自己学校
 
@@ -242,7 +285,9 @@ color_scheme: "red"
 2. Register in `references/layout-registry.yaml` (define `when` and `slots`)
 3. Done / 完成
 
-## Why Beamer? / 为什么用 Beamer？
+<br>
+
+## 🤔 Why Beamer? / 为什么用 Beamer？
 
 Many AI tools generate slides as images. This project uses LaTeX/Beamer — a deliberate choice validated through real defenses.
 
@@ -250,22 +295,23 @@ Many AI tools generate slides as images. This project uses LaTeX/Beamer — a de
 
 | Dimension / 维度 | Beamer Academic | Image-based / 图片生成 |
 |:--|:--|:--|
-| **Academic safety / 学术安全** | Template-constrained, advisor-approved style / 模板约束，不会"一看就是AI" | Unpredictable style / 视觉不确定 |
-| **Accuracy / 准确性** | Extracts original figures & formulas / 原图原公式 | May contain errors / 可能有误 |
-| **Editability / 可编辑** | Full `.tex` source / 源码完全可控 | Hard to modify / 改动困难 |
-| **Reproducibility / 可复现** | Same `.tex` = same PDF / 永远一致 | Different each time / 每次不同 |
+| **Academic safety / 学术安全** | Template-constrained, advisor-approved style<br>模板约束，不会"一看就是AI" | Unpredictable style<br>视觉不确定 |
+| **Accuracy / 准确性** | Extracts original figures & formulas<br>原图原公式 | May contain errors<br>可能有误 |
+| **Editability / 可编辑** | Full `.tex` source control<br>源码完全可控 | Hard to modify locally<br>改动困难 |
+| **Reproducibility / 可复现** | Same `.tex` = same PDF<br>永远一致 | Different each time<br>每次不同 |
 
 ### Best For / 适合谁
 
-- ✅ Thesis defense / 毕业答辩
-- ✅ Proposal defense / 开题报告
-- ✅ Conference talks / 学术会议
-- ✅ Lab meetings / 组会汇报
-- ❌ Business pitches / 商业路演
-- ❌ Product launches / 产品发布
-- ❌ Creative presentations / 创意设计
+| ✅ | ❌ |
+|:--|:--|
+| Thesis defense / 毕业答辩 | Business pitches / 商业路演 |
+| Proposal defense / 开题报告 | Product launches / 产品发布 |
+| Conference talks / 学术会议 | Creative presentations / 创意设计 |
+| Lab meetings / 组会汇报 | |
 
-## Project Structure / 项目结构
+<br>
+
+## 📁 Project Structure / 项目结构
 
 ```
 beamer-academic/
@@ -286,7 +332,9 @@ beamer-academic/
 └── README.md
 ```
 
-## Star History
+<br>
+
+## 📈 Star History
 
 <p align="center">
   <a href="https://star-history.com/#Faust-Donf/beamer-academic&Date">
@@ -294,16 +342,18 @@ beamer-academic/
   </a>
 </p>
 
-## Contributing
+<br>
+
+## 🤝 Contributing
 
 Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 欢迎贡献！请参阅 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-## Author / 作者
+## 👤 Author / 作者
 
 **Faustus** · [Xiaohongshu / 小红书](https://xhslink.com/m/2JQ3fmTu6dz)
 
-## License
+## 📄 License
 
 [MIT](LICENSE)
