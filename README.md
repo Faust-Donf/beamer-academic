@@ -15,6 +15,7 @@
   [![Version](https://img.shields.io/github/v/release/Faust-Donf/beamer-academic?style=for-the-badge&color=0066cc&label=VERSION)](https://github.com/Faust-Donf/beamer-academic/releases)
   [![Stars](https://img.shields.io/github/stars/Faust-Donf/beamer-academic?style=for-the-badge&color=f5a623&label=STARS)](https://github.com/Faust-Donf/beamer-academic/stargazers)
   [![License](https://img.shields.io/badge/LICENSE-MIT-green?style=for-the-badge)](LICENSE)
+  [![Try beamer-academic on Socialistic](https://socialistic.ai/api/embed/beamer-academic-ace6dc?lang=zh)](https://socialistic.ai/zh/skill/beamer-academic-ace6dc?utm_source=github&utm_medium=readme&utm_campaign=20260604-ai-deck-report-toolsmiths&utm_content=badge)
 
   <br>
 
