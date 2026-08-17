@@ -155,6 +155,27 @@ layouts:
       - thanks_text  # 致谢主标语
       - author_info  # 作者简短信息
 
+  - id: statement
+    name: 金句页
+    when: "一页只放一句。章末、贡献陈述、核心判断。"
+    slots:
+      - sentence
+
+  - id: stats
+    name: 三个数
+    when: "三个关键数字并排。BLEU、样本量、训练时间。不要做成卡片。"
+    slots:
+      - title
+      - intro
+      - numbers
+
+  - id: hypothesis
+    name: 三列短句
+    when: "H1/H2/H3 或三条并列结论。顶上一根线，短句说完。"
+    slots:
+      - title
+      - items
+
 # =============================================================
 # 版式选型优先级规则（供AI在Step 2使用）
 # =============================================================
@@ -168,6 +189,9 @@ selection_rules:
   - "每章最后如有明确结论用 conclusion-box"
   - "两章之间用 transition 衔接（承上启下）"
   - "并列要点（创新点、局限、展望）用 list"
+  - "一句话就能站住的判断用 statement"
+  - "三个关键数字用 stats，不要塞进表里"
+  - "H1/H2/H3 用 hypothesis"
   - "避免连续3页使用相同版式（节奏感）"
   - "全文控制在30-50页（答辩20分钟约40页）"
 
@@ -189,4 +213,4 @@ report_types:
   conference:
     required_pages: [cover, thanks]
     typical_length: 15-25
-    closing_text: "Thank you! Questions?"
+    closing_text: "欢迎提问"

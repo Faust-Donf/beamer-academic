@@ -4,9 +4,9 @@
 
 ## 文件
 
-- `defense.tex` — 完整 LaTeX 源码（26 页）
+- `defense.tex` — 完整 LaTeX 源码（28 页）
 - `defense.pdf` — 编译后的 PDF
-- `beamerthemeAcademic.sty` — 主题文件
+- `beamerthemeAcademic.sty` — 主题 v1.5
 
 ## 特点展示
 

@@ -283,19 +283,9 @@ Only after final confirmation, save the approved structure to `outline.md` for P
    - Fill slots with thesis content + extracted materials
 4. Close with `\end{document}`.
 
-### Critical: Section Divider = Outline Page (NOT full-color page)
+### Critical: Section Divider = 满版色 + 圆圈序号
 
-The section-divider page should be an **Outline page** that shows all chapters with the current
-chapter highlighted, NOT a full-color page with just a number. Use `\tableofcontents[currentsection]`
-or equivalent tabbing layout where current chapter is bold/colored and others are grayed out.
-
-Example (每章开头的分隔页):
-```latex
-\begin{frame}
-  \frametitle{Outline}
-  \tableofcontents[currentsection]
-\end{frame}
-```
+每章开头用 `\sectiondivider{1}{章标题}`（圆圈里用阿拉伯数字，中文「一」在圆里像减号）。目录只在第 2 页出现一次。
 
 ### Critical: TOC Page Format
 
@@ -354,10 +344,9 @@ Core rules:
 | Page structure | COMBINE multiple elements (see writing-style.md) |
 | `\itemize` | BANNED |
 
-### Section Divider = Outline Page (Enforced)
+### Section Divider (Enforced)
 
-Every chapter boundary MUST use an Outline page (`\tableofcontents[currentsection]`).
-This provides visual rhythm and structural navigation for the audience.
+Every chapter boundary MUST use `\sectiondivider{1}{章标题}`（圆圈用 1/2/3）。
 
 ### Anti-AI Title & Content Check
 

@@ -3,7 +3,7 @@
 Standard preamble for generated Beamer files. Fill placeholders from `config.yaml`.
 
 ```latex
-\documentclass[aspectratio={{ASPECT_RATIO}}, {{FONT_SIZE}}]{beamer}
+\documentclass[aspectratio={{ASPECT_RATIO}}, {{FONT_SIZE}}, t]{beamer}
 
 % ---------- Theme ----------
 \usepackage{beamerthemeAcademic}

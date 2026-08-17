@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### ✨ 新增
+- 主题 v1.5：去掉实心页眉，标题改下划线，底栏加进度条
+- 封面改为校名 + 标题下单线；致谢去掉 THANK YOU 复读
+- 结论框改为左边一条色；表格提供 `\headrow` / `\rowaccent`
+- 新页型：`\statementframe`、`\statrow`、`\hyporow`；章节页仍用满版色 + 圆圈
+
 ## [1.4.0] - 2026-05-22
 
 ### ✨ Added

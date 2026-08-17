@@ -18,6 +18,9 @@ Each section contains the LaTeX skeleton and slot definitions for one layout typ
 11. [transition](#transition) — 过渡衔接页
 12. [list](#list) — 列表页
 13. [thanks](#thanks) — 致谢页
+14. [statement](#statement) — 金句页
+15. [stats](#stats) — 三个数
+16. [hypothesis](#hypothesis) — 三列短句
 
 ---
 
@@ -375,16 +378,7 @@ Each section contains the LaTeX skeleton and slot definitions for one layout typ
 %   \textbf{H2 成立}\,——\,Sinsk 事件邻域存在\alert{超出随机预期}的
 %   形态空间结构性收缩，且收缩具有\alert{选择性过滤}特征。
 %
-% --- keybox 命令定义（在主题.sty中）---
-%   \newcommand{\keybox}[1]{%
-%     \begin{center}
-%     \begin{tikzpicture}
-%       \node[draw=lightline, line width=0.5pt, fill=black!4,
-%             rounded corners=2pt, inner sep=6pt,
-%             text width=0.92\linewidth, align=left, font=\small]{#1};
-%     \end{tikzpicture}
-%     \end{center}
-%   }
+% 主题里的 \keybox：浅底，左边一条主题色。
 ```
 
 ---
@@ -487,45 +481,42 @@ Each section contains the LaTeX skeleton and slot definitions for one layout typ
 %   - 有 gate_image: 显示校门图 + 致谢文字
 %   - 无 gate_image: 简洁致谢页（纯文字居中）
 
-% === 模式A: 有校门图 ===
-\begin{frame}[plain]
-  \begin{tikzpicture}[remember picture, overlay]
-    \fill[accentcolor] (current page.north west) rectangle
-      ([yshift=-0.12cm]current page.north east);
-    \fill[accentcolor] ([yshift=0.12cm]current page.south west) rectangle
-      (current page.south east);
-  \end{tikzpicture}
-  \vbox to \paperheight\bgroup
-    \vskip0.6cm
-    \begin{center}
-      {\color{accentcolor}\sffamily\fontsize{12pt}{14pt}\selectfont\addfontfeature{LetterSpace=20.0}THANK YOU}
-    \end{center}
-    \vskip0.4cm
-    \begin{center}
-      \includegraphics[width=0.86\paperwidth]{{{GATE_IMAGE}}}
-    \end{center}
-    \vfill
-    \begin{center}
-      {\color{accentcolor}\rule{1.6cm}{0.6pt}\hspace{0.5cm}\raisebox{0.18em}{$\bullet$}\hspace{0.5cm}\rule{1.6cm}{0.6pt}}\\[0.6cm]
-      {\color{accentcolor}\sffamily\fontsize{26pt}{34pt}\selectfont\bfseries {{THANKS_TEXT}}}\\[0.5cm]
-      {\color{textgray}\sffamily\fontsize{10pt}{12pt}\selectfont {{AUTHOR_INFO}}}
-    \end{center}
-    \vskip1.0cm
-  \egroup
-\end{frame}
+\thanksframe[{{GATE_IMAGE}}]{{{THANKS_TEXT}}}{{{AUTHOR_INFO}}}
+% 无图：\thanksframe{恳请各位老师批评指正}{XX大学 XX学院 | 姓名}
+```
 
-% === 模式B: 无校门图（简洁版）===
-% \begin{frame}[plain]
-%   \begin{tikzpicture}[remember picture, overlay]
-%     \fill[accentcolor] (current page.north west) rectangle (current page.south east);
-%     \node[white, font=\fontsize{12pt}{14pt}\selectfont\sffamily] at ([yshift=2cm]current page.center)
-%       {\addfontfeature{LetterSpace=20.0}THANK YOU};
-%     \node[white, font=\fontsize{26pt}{34pt}\selectfont\bfseries\sffamily] at (current page.center)
-%       {{{THANKS_TEXT}}};
-%     \node[white!80, font=\fontsize{10pt}{12pt}\selectfont\sffamily] at ([yshift=-2cm]current page.center)
-%       {{{AUTHOR_INFO}}};
-%   \end{tikzpicture}
-% \end{frame}
+---
+
+## statement
+
+```latex
+% 一页一句。章末、贡献、核心判断用。
+\statementframe{{{SENTENCE}}}
+```
+
+---
+
+## stats
+
+```latex
+\begin{frame}
+  \frametitle{{{TITLE}}}
+  {{CHAPNOTE_LINE}}
+  {{INTRO}}
+  \statrow{{{N1}}}{{{L1}}}{{{N2}}}{{{L2}}}{{{N3}}}{{{L3}}}
+\end{frame}
+```
+
+---
+
+## hypothesis
+
+```latex
+\begin{frame}
+  \frametitle{{{TITLE}}}
+  {{CHAPNOTE_LINE}}
+  \hyporow{{{H1}}}{{{T1}}}{{{H2}}}{{{T2}}}{{{H3}}}{{{T3}}}
+\end{frame}
 ```
 
 ---
